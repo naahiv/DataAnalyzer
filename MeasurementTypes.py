@@ -23,33 +23,33 @@ class PriceMeasurement(Frame):
         Frame.__init__(self, parent)
 
         self.l1 = Label(self, text="on Day ")
-        self.l1.grid(row=0, column=1, sticky=W)
+        self.l1.grid(row=0, column=0, sticky=W)
 
         self.e1 = Entry(self, width=2)
-        self.e1.grid(row=0, column=2)
+        self.e1.grid(row=0, column=1)
 
         self.l2 = Label(self, text=" at ")
-        self.l2.grid(row=0, column=3, sticky=W)
+        self.l2.grid(row=0, column=2, sticky=W)
 
         self.e2 = Entry(self, width=5)
-        self.e2.grid(row=0, column=4)
+        self.e2.grid(row=0, column=3)
 
         self.compState = StringVar(self)
         self.compState.set(' > ')
         self.comp = OptionMenu(self, self.compState, ' > ', ' < ', ' = ')
-        self.comp.grid(row=0, column=5, sticky=W)
+        self.comp.grid(row=0, column=4, sticky=W)
 
         self.l3 = Label(self, text="Day ")
-        self.l3.grid(row=0, column=6, sticky=W)
+        self.l3.grid(row=0, column=5, sticky=W)
 
         self.e3 = Entry(self, width=2)
-        self.e3.grid(row=0, column=7)
+        self.e3.grid(row=0, column=6)
 
         self.l4 = Label(self, text=" at ")
-        self.l4.grid(row=0, column=8, sticky=W)
+        self.l4.grid(row=0, column=7, sticky=W)
 
         self.e4 = Entry(self, width=5)
-        self.e4.grid(row=0, column=9)
+        self.e4.grid(row=0, column=8)
 
     def get(self):
         return ['price', self.e1.get(), self.e2.get(), self.compState.get(), self.e3.get(), self.e4.get()]
@@ -60,15 +60,15 @@ class InputMeasurement(Frame):
         Frame.__init__(self, parent)
 
         self.e1 = Entry(self, width=11)
-        self.e1.grid(row=0, column=1)
+        self.e1.grid(row=0, column=0)
 
         self.compState = StringVar(self)
         self.compState.set(' > ')
         self.comp = OptionMenu(self, self.compState, ' > ', ' < ', ' = ')
-        self.comp.grid(row=0, column=5, sticky=W)
+        self.comp.grid(row=0, column=1, sticky=W)
 
         self.e2 = Entry(self, width=12)
-        self.e2.grid(row=0, column=3)
+        self.e2.grid(row=0, column=2)
 
     def get(self):
         return ['input', self.e1.get(), self.compState.get(), self.e2.get()]
