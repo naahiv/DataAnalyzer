@@ -11,8 +11,8 @@ class CriteriaSelector(Frame):
         self.button1 = Button(self, text="Add New Criteria", command=self.create_new_crit)
         self.button1.grid(row=0, column=0, sticky=W)
 
-        self.button2 = Button(self, text="Print all", command=self.printAll)
-        self.button2.grid(row=1, column=0, sticky=W)
+        # self.button2 = Button(self, text="Print all", command=self.printAll)
+        # self.button2.grid(row=1, column=0, sticky=W)
 
     def switch_crit(self, meas, new_val):
         if new_val == 'Price':
@@ -27,7 +27,8 @@ class CriteriaSelector(Frame):
             print()
 
     def create_new_crit(self):
-        self.button2.destroy()
+        # self.button2.destroy()
+
         i = len(self.crit_list) + 1
 
         price_m = Measurement(self)
@@ -44,8 +45,8 @@ class CriteriaSelector(Frame):
 
         self.crit_list.append(price_m)
 
-        self.button2 = Button(self, text="Print all", command=self.printAll)
-        self.button2.grid(row=i+1, column=0, sticky=W)
+        # self.button2 = Button(self, text="Print all", command=self.printAll)
+        # self.button2.grid(row=i+1, column=0, sticky=W)
     
     def get():
         """
