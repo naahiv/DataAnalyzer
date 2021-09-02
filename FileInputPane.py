@@ -8,7 +8,8 @@ import os
 class FileInputPane(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
-        self.input_file = None
+        self.input_loc = None
+        self.out_name = None
 
         self.file_button = Button(self, text='Choose File', command=self.open_file)
         self.file_button.grid(row=0, column=0, pady=10)
@@ -31,7 +32,7 @@ class FileInputPane(Frame):
         ]
         opened_file = askopenfile(mode ='r', filetypes=filetypes)
         if opened_file is not None: 
-            self.input_file = opened_file
+            self.input_loc = opened_file.name
             self.run_button.configure(state=NORMAL)
             self.filename_label.configure(text=os.path.basename(self.input_file.name))
 

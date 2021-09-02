@@ -17,3 +17,11 @@ class VisualCriteria:
             self.input_field = list_crit[1]
             self.comp = list_crit[2][1]
             self.value = list_crit[3]
+
+class VisualOptions:
+    """
+    An interim class for storing the options selected before td_data_collector use
+    """
+    def __init__(self, infoList):
+        self.daysToPull = infoList[0]
+        self.dayOneDate = f'{infoList[1]}/{infoList[2]}/{infoList[3]}'

@@ -1,6 +1,6 @@
 from tkinter import *
 from MeasurementTypes import *
-from Misc import VisualCriteria
+from Misc import *
 
 class OptionsSelector(Frame):
     def __init__(self, parent):
@@ -8,11 +8,27 @@ class OptionsSelector(Frame):
 
         self.l1 = Label(self, text='Days to Pull:')
         self.l1.grid(row=0, column=0, sticky=W, padx=10)
-        self.e1 = Entry(self, width=2)
+        self.e1 = Entry(self, width=2, default='1')
         self.e1.grid(row=0, column=1, padx=5)
 
+        self.l2 = Label(self, text='Date:')
+        self.l2.grid(row=1, column=0, sticky=W, padx=10)
+
+        self.e_month = Entry(self, width=2)
+        self.lS1 = Label(self, text='/')
+        self.e_day = Entry(self, width=2)
+        self.lS2 = Label(self, text='/')
+        self.e_year = Entry(self, width=4)
+
+        self.e_month.grid(row=1, column=1)
+        self.lS1.grid(row=1, column=2)
+        self.e_day.grid(row=1, column=3)
+        self.lS2.grid(row=1, column=4)
+        self.e_year.grid(row=1, column=5)
+
     def get():
-        return [self.e1.get()]
+        infoList = [self.e1.get(), self.e_month.get(), self.e_day.get(), self.e_year.get()]
+        return VisualOptions(infoList)
 
 if __name__ == '__main__':
     from ctypes import windll
