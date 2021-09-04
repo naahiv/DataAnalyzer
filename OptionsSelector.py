@@ -8,7 +8,8 @@ class OptionsSelector(Frame):
 
         self.l1 = Label(self, text='Days to Pull:')
         self.l1.grid(row=0, column=0, sticky=W, padx=10)
-        self.e1 = Entry(self, width=2, default='1')
+        self.e1 = Entry(self, width=2)
+        self.e1.insert(0, '1')
         self.e1.grid(row=0, column=1, padx=5)
 
         self.l2 = Label(self, text='Date:')
@@ -26,7 +27,7 @@ class OptionsSelector(Frame):
         self.lS2.grid(row=1, column=4)
         self.e_year.grid(row=1, column=5)
 
-    def get():
+    def get(self):
         infoList = [self.e1.get(), self.e_month.get(), self.e_day.get(), self.e_year.get()]
         return VisualOptions(infoList)
 

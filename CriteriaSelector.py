@@ -48,13 +48,13 @@ class CriteriaSelector(Frame):
         # self.button2 = Button(self, text="Print all", command=self.printAll)
         # self.button2.grid(row=i+1, column=0, sticky=W)
     
-    def get():
+    def get(self):
         """
         Returns a list of VisualCriteria objects, one for each row in the criteria section of the app.
         """
         final_list = []
-        for crit in crit_list:
-            final_list.append(VisualCriteria(crit_list))
+        for crit in self.crit_list:
+            final_list.append(VisualCriteria(crit.get()))
         return final_list
 
 

@@ -20,8 +20,10 @@ class FileInputPane(Frame):
         self.opt_sel = OptionsSelector(self)
         self.opt_sel.grid(row=1, column=0, pady=10)
 
-        self.run_button = Button(self, text='Run Analysis', command=self.run_anal, state=DISABLED)
+        self.run_button = Button(self, text='Run Analysis', command=self.browse_for_save, state=DISABLED)
         self.run_button.grid(row=2, column=0)
+
+        self.run_analysis = None
 
 
     def open_file(self): 
@@ -34,19 +36,19 @@ class FileInputPane(Frame):
         if opened_file is not None: 
             self.input_loc = opened_file.name
             self.run_button.configure(state=NORMAL)
-            self.filename_label.configure(text=os.path.basename(self.input_file.name))
-
-    def run_anal(self):
-        print('Program Running!')
-        self.browse_for_save()
+            self.filename_label.configure(text=os.path.basename(self.input_loc))
 
     def browse_for_save(self):
         f = asksaveasfile(mode='w', title='Save File', defaultextension='.csv')
         self.out_name = f.name
         f.close()
+        self.run_analysis()
 
     def get(self):
-        return [self.input_file, self.n_days, self.out_name]
+        return [self.input_loc, self.opt_sel.get(), self.out_name]
+
+    def add_to_run(self, run_collection):
+        self.run_analysis = run_collection
 
 if __name__ == '__main__':
     from ctypes import windll
