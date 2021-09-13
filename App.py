@@ -1,7 +1,6 @@
 from tkinter import *
 from CriteriaSelector import *
 from FileInputPane import *
-import asyncio
 from DataCollectorInterface import *
 
 class App(Frame):

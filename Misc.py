@@ -12,7 +12,7 @@ class VisualCriteria:
             self.time1 = list_crit[2]
             self.comp = list_crit[3][1]
             self.day2 = list_crit[4]
-            self.day3 = list_crit[5]
+            self.time2 = list_crit[5]
         elif self.type == 1:
             self.input_field = list_crit[1]
             self.comp = list_crit[2][1]
