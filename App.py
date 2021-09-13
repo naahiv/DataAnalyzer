@@ -2,6 +2,8 @@ from tkinter import *
 from CriteriaSelector import *
 from FileInputPane import *
 from DataCollectorInterface import *
+from tkinter.ttk import Progressbar
+import threading
 
 class App(Frame):
     def __init__(self, parent):
@@ -21,10 +23,20 @@ class App(Frame):
 
         self.file_input_pane.add_to_run(self.run_collection)
 
+        self.progress = Progressbar(self, orient=HORIZONTAL,length=100,  mode='indeterminate')
+
     def run_collection(self):
         criteria = self.crit_select.get()
         options = self.file_input_pane.get()
-        DataCollectorInterface.run_analysis(options, criteria)
+
+        def run_threaded_process():
+            self.progress.grid(row=2, column=0)
+            self.progress.start()
+            DataCollectorInterface.run_analysis(options, criteria)
+            self.progress.stop()
+            self.progress.grid_forget()
+
+        threading.Thread(target=run_threaded_process).start()
         print(criteria, options)
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ class DataCollectorInterface:
         print(f'time_list: {time_list}')
         dataFilter = dc.DataFilter(path_in, day1, [time_list for i in range(nDays)])    
         master = dataFilter.generateMaster()
-        for strat in strats:
+        for strat in boolean_strats:
             master.filterFor(strat)
         master.export_csv(path_out)
     
@@ -49,7 +49,7 @@ class DataCollectorInterface:
     
     def time_order(time_set):
         mins_list = list(map(DataCollectorInterface.to_minutes, time_set))
-        return sorted(mins_list)
+        return [t for _, t in sorted(zip(mins_list, time_set))]
     
     def to_minutes(time_str):
         hrs = time_str.split(':')[0]
