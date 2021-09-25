@@ -3,3 +3,5 @@ td_data_collector/
 Untitled.ipynb
 .ipynb_checkpoints/
 *.swp
+enc_key.py
+td_auth.txt
