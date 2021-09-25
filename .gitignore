@@ -5,3 +5,6 @@ Untitled.ipynb
 *.swp
 enc_key.py
 td_auth.txt
+dist/
+build/
+App.spec

@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['App.pyw', 'DataAnalyzer.exe'],
+a = Analysis(['App.pyw'],
              pathex=['D:\\Documents\\DataAnalyzer'],
              binaries=[],
              datas=[],
