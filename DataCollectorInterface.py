@@ -1,12 +1,13 @@
 import td_data_collector as dc
 from DecrypterModule import get_key_and_token
 api_key, oauth_token = get_key_and_token()
-print(api_key)
-print(oauth_token)
+# print(api_key)
+# print(oauth_token)
 dc.init_auth_data(api_key, oauth_token)
 
 class DataCollectorInterface:
     def run_analysis(options, criteria):
+
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
         time_list = DataCollectorInterface.time_order(unordered_times)
         
@@ -20,8 +21,11 @@ class DataCollectorInterface:
         print(f'time_list: {time_list}')
         dataFilter = dc.DataFilter(path_in, day1, [time_list for i in range(nDays)])    
         master = dataFilter.generateMaster()
+        print(boolean_strats)
         for strat in boolean_strats:
+            master.show()
             master.filterFor(strat)
+
         master.export_csv(path_out)
     
     def create_strategies(criteria_list):
@@ -33,23 +37,35 @@ class DataCollectorInterface:
                 str2 = f'{crit.day2} - {crit.time2}'
                 times += [crit.time1, crit.time2]
                 if crit.comp == '<':
-                    strat_func = lambda data: data[str1] < data[str2]
+                    strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2]
                     strategies.append(dc.BooleanStrategy(strat_func))
                 elif crit.comp == '>':
-                    strat_func = lambda data: data[str1] > data[str2]
+                    strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2]
                     strategies.append(dc.BooleanStrategy(strat_func))
                 else: # = sign
-                    strat_func = lambda data: data[str1] == data[str2]
+                    strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
                     strategies.append(dc.BooleanStrategy(strat_func))
             elif crit.type == 1: # value strategy
                 if crit.comp == '<':
-                    strat_func = lambda data: data[crit.input_field] < crit.value
+                    def strat_func(data, crit=crit):
+                        try:
+                            return int(data[crit.input_field]) < int(crit.value)
+                        except:
+                            return False
                     strategies.append(dc.BooleanStrategy(strat_func))
                 elif crit.comp == '>':
-                    strat_func = lambda data: data[crit.input_field] > crit.value
+                    def strat_func(data, crit=crit):
+                        try:
+                            return int(data[crit.input_field]) > int(crit.value)
+                        except:
+                            return False
                     strategies.append(dc.BooleanStrategy(strat_func))
                 else: # = sign
-                    strat_func = lambda data: data[crit.input_field] == crit.value
+                    def strat_func(data, crit=crit):
+                        try:
+                            return data[crit.input_field] == crit.value
+                        except:
+                            return False
                     strategies.append(dc.BooleanStrategy(strat_func))
         return strategies, list(set(times))
     

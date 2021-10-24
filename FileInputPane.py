@@ -29,7 +29,7 @@ class FileInputPane(Frame):
     def open_file(self): 
         filetypes = [
             ('Excel Spreadsheets', '*.xlsx'), 
-            ('Comma Separated Lists','*.csv'),
+            # ('Comma Separated Lists','*.csv'),
             ('All Files', '*')
         ]
         opened_file = askopenfile(mode ='r', filetypes=filetypes)
