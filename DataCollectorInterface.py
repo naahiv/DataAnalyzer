@@ -20,10 +20,12 @@ class DataCollectorInterface:
         
         print(f'time_list: {time_list}')
         dataFilter = dc.DataFilter(path_in, day1, [time_list for i in range(nDays)])    
-        master = dataFilter.generateMaster()
-        print(boolean_strats)
+        if not time_list == []:
+            master = dataFilter.generateMaster()
+        else:
+            master = dataFilter
         for strat in boolean_strats:
-            master.show()
+            # master.show()
             master.filterFor(strat)
 
         master.export_csv(path_out)
