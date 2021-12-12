@@ -18,6 +18,9 @@ class Measurement(Frame):
     def get(self):
         return self.meas.get()
 
+    def destroy(self):
+        self.meas.destroy()
+
 class PriceMeasurement(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -54,6 +57,16 @@ class PriceMeasurement(Frame):
     def get(self):
         return ['price', self.e1.get(), self.e2.get(), self.compState.get(), self.e3.get(), self.e4.get()]
 
+    def destroy(self):
+        self.l1.destroy()
+        self.e1.destroy()
+        self.e2.destroy()
+        self.comp.destroy()
+        self.l2.destroy()
+        self.l3.destroy()
+        self.e3.destroy()
+        self.l4.destroy()
+        self.e4.destroy()
 
 class InputMeasurement(Frame):
     def __init__(self, parent):
@@ -72,3 +85,8 @@ class InputMeasurement(Frame):
 
     def get(self):
         return ['input', self.e1.get(), self.compState.get(), self.e2.get()]
+
+    def destroy(self):
+        self.e1.destroy()
+        self.comp.destroy()
+        self.e2.destroy()
