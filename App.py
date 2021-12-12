@@ -3,6 +3,7 @@ from CriteriaSelector import *
 from FileInputPane import *
 from DataCollectorInterface import *
 from tkinter.ttk import Progressbar
+from EntryExitTester import *
 import threading
 
 class App(Frame):
@@ -21,13 +22,18 @@ class App(Frame):
         self.crit_select = CriteriaSelector(self)
         self.crit_select.grid(row=1, column=1, rowspan=10, columnspan=4)
 
+        self.entry_exit = EntryExitTester(self)
+        self.entry_exit.grid(row=2, column=0, pady=20)
+
         self.file_input_pane.add_to_run(self.run_collection)
 
-        self.progress = Progressbar(self, orient=HORIZONTAL,length=100,  mode='indeterminate')
+        self.progress = Progressbar(self, orient=HORIZONTAL, length=100,  mode='indeterminate')
 
     def run_collection(self):
         criteria = self.crit_select.get()
         options = self.file_input_pane.get()
+
+        entry_exit = self.entry_exit.get()
 
         def run_threaded_process():
             self.progress.grid(row=2, column=0)
@@ -44,6 +50,6 @@ if __name__ == '__main__':
     windll.shcore.SetProcessDpiAwareness(1)
     root = Tk()
     root.title('Data Analyzer')
-    root.geometry('1600x1000')
+    root.geometry('2000x1200')
     App(root).grid(row=0, column=0)
     root.mainloop()
