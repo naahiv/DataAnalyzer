@@ -11,6 +11,8 @@ class CriteriaSelector(Frame):
         self.button1 = Button(self, text="Add New Criteria", command=self.create_new_crit)
         self.button1.grid(row=0, column=0, sticky=W)
 
+        self.row_list = []
+
         # self.button2 = Button(self, text="Print all", command=self.printAll)
         # self.button2.grid(row=1, column=0, sticky=W)
 
@@ -21,15 +23,25 @@ class CriteriaSelector(Frame):
             meas.switch(1)
 
     def printAll(self):
-        for critRow in self.crit_list:
-            for e in critRow.get():
-                print(e)
-            print()
+        print(len(self.crit_list))
+
+    def delete_crit(self, r):
+        for (i, row) in enumerate(self.row_list):
+            if row[0].grid_info()["row"] == r:
+                for obj in self.row_list[i]:
+                    obj.destroy()
+                self.row_list.pop(i)
+                self.crit_list.pop(i)
+                break
 
     def create_new_crit(self):
         # self.button2.destroy()
 
-        i = len(self.crit_list) + 1
+        l = len(self.row_list)
+        try:
+            i = self.row_list[l - 1][0].grid_info()["row"] + 1
+        except IndexError:
+            i = 1
 
         price_m = Measurement(self)
 
@@ -39,14 +51,20 @@ class CriteriaSelector(Frame):
 
         m_label = Label(self, text=f'Measurement #{i}: ')
 
+        del_button = Button(self, text="X",command=lambda r=i: self.delete_crit(r))
+
         m_label.grid(row=i, column=0)
         optMenu.grid(row=i, column=1, sticky=E)
         price_m.grid(row=i, column=2)
+        del_button.grid(row=i, column=3)
 
         self.crit_list.append(price_m)
 
+        self.row_list.append([m_label, optMenu, price_m, del_button])
+
         # self.button2 = Button(self, text="Print all", command=self.printAll)
         # self.button2.grid(row=i+1, column=0, sticky=W)
+
     
     def get(self):
         """
