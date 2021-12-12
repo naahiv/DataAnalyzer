@@ -43,9 +43,14 @@ class DataCollectorInterface:
             master.filterFor(strat)
 
         if validate_ee(en_ex):
-            master.func_test(name="Percentage Win", func=entry_exit_test)
+            total_success_rate = master.func_test(name="Percentage Win", func=entry_exit_test)
 
         master.export_csv(path_out)
+
+        if validate_ee(en_ex):
+            return total_success_rate
+        else:
+            return None
 
     def validate_ee(en_ex):
         for x in en_ex:

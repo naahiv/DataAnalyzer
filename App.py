@@ -5,6 +5,7 @@ from DataCollectorInterface import *
 from tkinter.ttk import Progressbar
 from EntryExitTester import *
 import threading
+from tkinter import messagebox
 
 class App(Frame):
     def __init__(self, parent):
@@ -38,9 +39,11 @@ class App(Frame):
         def run_threaded_process():
             self.progress.grid(row=2, column=0)
             self.progress.start()
-            DataCollectorInterface.run_analysis(options, criteria)
+            out_val = DataCollectorInterface.run_analysis(options, criteria)
             self.progress.stop()
             self.progress.grid_forget()
+            if not out_val == None:
+                messagebox.showinfo("Success Rate", f'The overall sucess rate of this strategy was {out_val}%')
 
         threading.Thread(target=run_threaded_process).start()
         print(criteria, options)
