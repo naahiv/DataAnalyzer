@@ -6,9 +6,23 @@ api_key, oauth_token = get_key_and_token()
 dc.init_auth_data(api_key, oauth_token)
 
 class DataCollectorInterface:
-    def run_analysis(options, criteria):
+    def run_analysis(options, criteria, en_ex):
 
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
+
+        if validate_ee(en_ex):
+            day_in = int(en_ex[0])
+            time_in = en_ex[1]
+            day_out = int(en_ex[2])
+            time_out = en_ex[3]
+
+            unordered_times += [time_in, time_out]
+
+            def entry_exit_test(data):
+                p1 = data[f'{day_in} - {time_in}']
+                p2 = data[f'{day_out} - {time_out}']
+                perc_incr = 100 * (p2 - p1) / p1
+
         time_list = DataCollectorInterface.time_order(unordered_times)
         
         path_in = options[0]
@@ -28,7 +42,16 @@ class DataCollectorInterface:
             # master.show()
             master.filterFor(strat)
 
+        if validate_ee(en_ex):
+            master.func_test(name="Percentage Win", func=entry_exit_test)
+
         master.export_csv(path_out)
+
+    def validate_ee(en_ex):
+        for x in en_ex:
+            if x == "":
+                return False
+        return True
     
     def create_strategies(criteria_list):
         strategies = []
