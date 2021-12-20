@@ -33,13 +33,12 @@ class App(Frame):
     def run_collection(self):
         criteria = self.crit_select.get()
         options = self.file_input_pane.get()
-
         entry_exit = self.entry_exit.get()
 
         def run_threaded_process():
             self.progress.grid(row=2, column=0)
             self.progress.start()
-            out_val = DataCollectorInterface.run_analysis(options, criteria)
+            out_val = DataCollectorInterface.run_analysis(options, criteria, entry_exit)
             self.progress.stop()
             self.progress.grid_forget()
             if not out_val == None:

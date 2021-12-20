@@ -10,7 +10,7 @@ class DataCollectorInterface:
 
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
 
-        if validate_ee(en_ex):
+        if DataCollectorInterface.validate_ee(en_ex):
             day_in = int(en_ex[0])
             time_in = en_ex[1]
             day_out = int(en_ex[2])
@@ -22,6 +22,7 @@ class DataCollectorInterface:
                 p1 = data[f'{day_in} - {time_in}']
                 p2 = data[f'{day_out} - {time_out}']
                 perc_incr = 100 * (p2 - p1) / p1
+                return round(perc_incr, 2)
 
         time_list = DataCollectorInterface.time_order(unordered_times)
         
@@ -42,12 +43,12 @@ class DataCollectorInterface:
             # master.show()
             master.filterFor(strat)
 
-        if validate_ee(en_ex):
-            total_success_rate = master.func_test(name="Percentage Win", func=entry_exit_test)
+        if DataCollectorInterface.validate_ee(en_ex):
+            total_success_rate = master.func_test("Percentage Win", entry_exit_test)
 
         master.export_csv(path_out)
 
-        if validate_ee(en_ex):
+        if DataCollectorInterface.validate_ee(en_ex):
             return total_success_rate
         else:
             return None
