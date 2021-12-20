@@ -30,7 +30,7 @@ class EntryExitTester(Frame):
         self.e4.grid(row=0, column=8, padx=10)
 
     def get(self):
-        return ['price', self.e1.get(), self.e2.get(), self.e3.get(), self.e4.get()]
+        return [self.e1.get(), self.e2.get(), self.e3.get(), self.e4.get()]
 
 if __name__ == '__main__':
     from ctypes import windll
