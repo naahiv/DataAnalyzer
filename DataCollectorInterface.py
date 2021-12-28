@@ -100,7 +100,8 @@ class DataCollectorInterface:
                     strategies.append(dc.BooleanStrategy(strat_func))
         return strategies, list(set(times))
     
-    def time_order(time_set):
+    def time_order(t_list):
+        time_set = list(set(t_list))
         mins_list = list(map(DataCollectorInterface.to_minutes, time_set))
         return [t for _, t in sorted(zip(mins_list, time_set))]
     
