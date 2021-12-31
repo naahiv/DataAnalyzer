@@ -13,6 +13,9 @@ class VisualCriteria:
             self.comp = list_crit[3][1]
             self.day2 = list_crit[4]
             self.time2 = list_crit[5]
+            self.by_perc = None
+            if not list_crit[6] == "":
+                self.by_perc = float(list_crit[6])
         elif self.type == 1:
             self.input_field = list_crit[1]
             self.comp = list_crit[2][1]

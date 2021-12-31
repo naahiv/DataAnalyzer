@@ -54,8 +54,17 @@ class PriceMeasurement(Frame):
         self.e4 = Entry(self, width=5)
         self.e4.grid(row=0, column=8, padx=10)
 
+        self.l5 = Label(self, text=" by ")
+        self.l5.grid(row=0, column=9, sticky=W, padx=10)
+
+        self.e5 = Entry(self, width=3)
+        self.e4.grid(row=0, column=10, padx=10)
+
+        self.l6 = Label(self, text="%")
+        self.l6.grid(row=0, column=11, sticky=W, padx=10)
+
     def get(self):
-        return ['price', self.e1.get(), self.e2.get(), self.compState.get(), self.e3.get(), self.e4.get()]
+        return ['price', self.e1.get(), self.e2.get(), self.compState.get(), self.e3.get(), self.e4.get(), self.e5.get()]
 
     def destroy(self):
         self.l1.destroy()
@@ -67,6 +76,9 @@ class PriceMeasurement(Frame):
         self.e3.destroy()
         self.l4.destroy()
         self.e4.destroy()
+        self.l5.destroy()
+        self.e5.destroy()
+        self.l6.destroy()
 
 class InputMeasurement(Frame):
     def __init__(self, parent):
