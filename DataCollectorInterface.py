@@ -67,15 +67,27 @@ class DataCollectorInterface:
                 str1 = f'{crit.day1} - {crit.time1}'
                 str2 = f'{crit.day2} - {crit.time2}'
                 times += [crit.time1, crit.time2]
-                if crit.comp == '<':
-                    strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2]
-                    strategies.append(dc.BooleanStrategy(strat_func))
-                elif crit.comp == '>':
-                    strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2]
-                    strategies.append(dc.BooleanStrategy(strat_func))
-                else: # = sign
-                    strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
-                    strategies.append(dc.BooleanStrategy(strat_func))
+                if crit.by_perc == None:
+                    if crit.comp == '<':
+                        strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2]
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                    elif crit.comp == '>':
+                        strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2]
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                    else: # = sign
+                        strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                else:
+                    if crit.comp == '<':
+                        strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2] * (1 - self.by_perc / 100)
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                    elif crit.comp == '>':
+                        strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2] * (1 + self.by_perc / 100)
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                    else: # = sign
+                        strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
+                        strategies.append(dc.BooleanStrategy(strat_func))
+
             elif crit.type == 1: # value strategy
                 if crit.comp == '<':
                     def strat_func(data, crit=crit):
