@@ -57,8 +57,8 @@ class PriceMeasurement(Frame):
         self.l5 = Label(self, text=" by ")
         self.l5.grid(row=0, column=9, sticky=W, padx=10)
 
-        self.e5 = Entry(self, width=3)
-        self.e4.grid(row=0, column=10, padx=10)
+        self.e5 = Entry(self, width=4)
+        self.e5.grid(row=0, column=10, padx=10)
 
         self.l6 = Label(self, text="%")
         self.l6.grid(row=0, column=11, sticky=W, padx=10)

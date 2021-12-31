@@ -52,6 +52,6 @@ if __name__ == '__main__':
     windll.shcore.SetProcessDpiAwareness(1)
     root = Tk()
     root.title('Data Analyzer')
-    root.geometry('2000x1200')
+    root.geometry('2200x1400')
     App(root).grid(row=0, column=0)
     root.mainloop()
