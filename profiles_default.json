@@ -1,0 +1,77 @@
+[
+	{
+		"name": "daily strategy",
+		"daysToPull": 3,
+		"strategies": [
+			{
+				"type": 0,
+				"day1": 1,
+				"time1": "9:32",
+				"comp": "<",
+				"day2": 1,
+				"time2": "9:34"
+			},
+			{
+				"type": 0,
+				"day1": 1,
+				"time1": "9:31",
+				"comp": "<",
+				"day2": 1,
+				"time2": "15:59",
+				"by_perc": 1.5
+			},
+			{
+				"type": 1,
+				"input_field": "Avg Vol 1 Mo",
+				"comp": "<",
+				"value": 1000000
+			}
+		],
+		"entry_exit": {
+				"day1": 2,
+				"time1": "9:34",
+				"day2": 3,
+				"time2": "15:30"
+		}
+	},
+	{
+		"name": "day 1 short test",
+		"daysToPull": 1,
+		"strategies": [
+			{
+				"type": 1,
+				"input_field": "Avg Vol 1 Mo",
+				"comp": "<",
+				"value": 1200000
+			}
+		],
+		"entry_exit": {
+				"day1": 1,
+				"time1": "9:32",
+				"day2": 1,
+				"time2": "15:55"
+		}
+	},
+	{
+		"name": "cont incr day 1 2",
+		"daysToPull": 3,
+		"strategies": [
+			{
+				"type": 0,
+				"day1": 1,
+				"time1": "9:31",
+				"comp": "<",
+				"day2": 1,
+				"time2": "15:59"
+			},
+			{
+				"type": 0,
+				"day1": 1,
+				"time1": "9:31",
+				"comp": "<",
+				"day2": 1,
+				"time2": "15:59"
+			}
+		]
+	}
+]
