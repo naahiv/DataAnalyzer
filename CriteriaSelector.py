@@ -68,7 +68,9 @@ class CriteriaSelector(Frame):
         # self.button2.grid(row=i+1, column=0, sticky=W)
 
     def update_from_crit_list(self, vis_crits):
-        # code to delete existing criteria
+        for i in range(len(self.row_list))
+            for obj in self.row_list.pop(i)
+                obj.destroy()
         for crit in vis_crits:
             self.create_new_crit()
             row = self.row_list[-1]
@@ -79,7 +81,7 @@ class CriteriaSelector(Frame):
             price_m.data_setup(crit)
     
     def get(self):
-        """
+       """
         Returns a list of VisualCriteria objects, one for each row in the criteria section of the app.
         """
         final_list = []

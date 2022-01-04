@@ -49,12 +49,17 @@ class VisualCriteria:
             dct['comp'] = self.comp
             dct['day2'] = self.day2
             dct['time2'] = self.time2
+            if self.by_perc:
+                dct['by_perc'] = self.by_perc
+
         else:
-            dct['type'] = 0
+            dct['type'] = 1
             dct['comp'] = self.comp
             dct['input_field'] = self.input_field
             dct['value'] = self.value
         return dct
+
+
 class VisualOptions:
     """
     An interim class for storing the options selected before td_data_collector use
@@ -64,13 +69,18 @@ class VisualOptions:
         self.dayOneDate = f'{infoList[1]}/{infoList[2]}/{infoList[3]}'
 
 class Profile:
-    def __init__(self, prof_dict):
-        self.name = prof_dict['name']
-        self.daysToPull = prof_dict['daysToPull']
-        self.crits = [VisualCriteria(None, crit_dict) for crit_dict in prof_dict['criteria']]
-        self.ee_dict = None
-        if 'entry_exit' in prof_dict:
-            self.ee_dict = prof_dict['entry_exit']
+    def __init__(self, prof_dict, direct_init=None):
+        if direct_init:
+            self.name = direct_init['name']
+            self.crits = direct_init['crits']
+            self.ee_dict = direct_init['ee']
+        else:
+            self.name = prof_dict['name']
+            self.daysToPull = prof_dict['daysToPull']
+            self.crits = [VisualCriteria(None, crit_dict) for crit_dict in prof_dict['criteria']]
+            self.ee_dict = None
+            if 'entry_exit' in prof_dict:
+                self.ee_dict = prof_dict['entry_exit']
 
     def export_to_dict(self):
         prof_dict = {}
