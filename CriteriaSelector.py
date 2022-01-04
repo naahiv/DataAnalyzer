@@ -12,6 +12,7 @@ class CriteriaSelector(Frame):
         self.button1.grid(row=0, column=0, sticky=W)
 
         self.row_list = []
+        self.option_states = []
 
         # self.button2 = Button(self, text="Print all", command=self.printAll)
         # self.button2.grid(row=1, column=0, sticky=W)
@@ -61,11 +62,26 @@ class CriteriaSelector(Frame):
         self.crit_list.append(price_m)
 
         self.row_list.append([m_label, optMenu, price_m, del_button])
+        self.option_states.append(optState)
 
         # self.button2 = Button(self, text="Print all", command=self.printAll)
         # self.button2.grid(row=i+1, column=0, sticky=W)
 
-    
+    def update_from_crit_list(self, vis_crits):
+        for i in range(len(self.row_list)):
+            self.crit_list.pop(0)
+            for obj in self.row_list.pop(0):
+                obj.destroy()
+        for crit in vis_crits:
+            self.create_new_crit()
+            row = self.row_list[-1]
+            price_m = row[2]
+            optState = self.option_states[-1]
+            if crit.type == 1:
+                optState.set('Input Value')
+                self.switch_crit(price_m, 'Input Value')
+            price_m.data_setup(crit)
+
     def get(self):
         """
         Returns a list of VisualCriteria objects, one for each row in the criteria section of the app.

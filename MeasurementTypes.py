@@ -1,5 +1,9 @@
 from tkinter import *
 
+def setText(entry, text):
+    entry.delete(0, 'end')
+    entry.insert(0, text)
+
 class Measurement(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -20,6 +24,21 @@ class Measurement(Frame):
 
     def destroy(self):
         self.meas.destroy()
+
+    def data_setup(self, crit):
+        # already switced
+        if crit.type == 0:
+            setText(self.meas.e1, crit.day1)
+            setText(self.meas.e2, crit.time1)
+            setText(self.meas.e3, crit.day2)
+            setText(self.meas.e4, crit.time2)
+            if crit.by_perc:
+                setText(self.meas.e5, crit.by_perc)
+            self.meas.compState.set(' ' + crit.comp + ' ')
+        else:
+            setText(self.meas.e1, crit.input_field)
+            setText(self.meas.e2, crit.value)
+            self.meas.compState.set(' ' + crit.comp + ' ')
 
 class PriceMeasurement(Frame):
     def __init__(self, parent):
@@ -64,6 +83,7 @@ class PriceMeasurement(Frame):
         self.l6.grid(row=0, column=11, sticky=W, padx=10)
 
     def get(self):
+        # print(self.e1.get())
         return ['price', self.e1.get(), self.e2.get(), self.compState.get(), self.e3.get(), self.e4.get(), self.e5.get()]
 
     def destroy(self):
