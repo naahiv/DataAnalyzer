@@ -79,10 +79,10 @@ class DataCollectorInterface:
                         strategies.append(dc.BooleanStrategy(strat_func))
                 else:
                     if crit.comp == '<':
-                        strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2] * (1 - crit.by_perc / 100)
+                        strat_func = lambda data, str1=str1, str2=str2, crit=crit: data[str1] < data[str2] * (1 - crit.by_perc / 100)
                         strategies.append(dc.BooleanStrategy(strat_func))
                     elif crit.comp == '>':
-                        strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2] * (1 + crit.by_perc / 100)
+                        strat_func = lambda data, str1=str1, str2=str2, crit=crit: data[str1] > data[str2] * (1 + crit.by_perc / 100)
                         strategies.append(dc.BooleanStrategy(strat_func))
                     else: # = sign
                         strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
