@@ -55,6 +55,8 @@ class ProfileSelector(Frame):
             new_profile.name = name
             self.pf_list.prof_list.append(new_profile)
             self.pf_list.export_profile_list()
+            self.update_chooser()
+            self.current_state.set(name)
             self.switch_profile(name)
 
     def rename_clicked(self):
