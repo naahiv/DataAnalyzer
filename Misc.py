@@ -43,20 +43,6 @@ class VisualCriteria:
     def export_to_dict(self):
         dct = {}
         if self.type == 0:
-<<<<<<< HEAD
-            self.day1 = list_crit[1]
-            self.time1 = list_crit[2]
-            self.comp = list_crit[3][1]
-            self.day2 = list_crit[4]
-            self.time2 = list_crit[5]
-            self.by_perc = None
-            if not list_crit[6] == "":
-                self.by_perc = float(list_crit[6])
-        elif self.type == 1:
-            self.input_field = list_crit[1]
-            self.comp = list_crit[2][1]
-            self.value = list_crit[3]
-=======
             dct['type'] = 0
             dct['day1'] = self.day1
             dct['time1'] = self.time1
@@ -72,8 +58,6 @@ class VisualCriteria:
             dct['input_field'] = self.input_field
             dct['value'] = self.value
         return dct
-
->>>>>>> profiles
 
 class VisualOptions:
     """
