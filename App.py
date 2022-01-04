@@ -44,14 +44,18 @@ class App(Frame):
         ee_dict = None
         if DataCollectorInterface.validate_ee(ee):
             ee_dict = {'day1': ee[0], 'time1':ee[1], 'day2': ee[2], 'time2': ee[3]}
-        return Profile(None, {'name': None, 'crits': crit_list, 'ee': ee_dict})
+        return Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
 
     def switch_to_profile(self, prof):
-        if prof.name:
-            setText(self.file_input_pane.opt_set.e1, prof.name)
+        if prof.daysToPull:
+            setText(self.file_input_pane.opt_sel.e1, prof.daysToPull)
         else:
-            setText(self.tile_input_pane.opt_set.e1, "")
+            setText(self.file_input_pane.opt_sel.e1, "")
         self.crit_select.update_from_crit_list(prof.crits)
+        if prof.ee_dict:
+            self.entry_exit.set_manual(prof.ee_dict)
+        else:
+            self.entry_exit.set_manual({'day1': '', 'time1': '', 'day2': '', 'time2': ''})
 
     def run_collection(self):
         criteria = self.crit_select.get()

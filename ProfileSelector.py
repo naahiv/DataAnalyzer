@@ -48,14 +48,14 @@ class ProfileSelector(Frame):
 
     def save_as_clicked(self):
         name = simpledialog.askstring(title='Save As', prompt=f'Enter a name for this profile')
-        if new_name == '' or new_name in self.profile_names or new_name == '(empty)':
+        if name == '' or name in self.profile_names or name == '(empty)':
             self.save_as_clicked()
         else:
             new_profile = self.get_meas_info()
             new_profile.name = name
             self.pf_list.prof_list.append(new_profile)
             self.pf_list.export_profile_list()
-            self.switch_profile(self, prof_name)
+            self.switch_profile(name)
 
     def rename_clicked(self):
         prof_index = self.profile_names.index(self.current_state.get())

@@ -1,5 +1,6 @@
 from tkinter import *
 import os
+from MeasurementTypes import setText
 
 class EntryExitTester(Frame):
     def __init__(self, parent):
@@ -28,6 +29,12 @@ class EntryExitTester(Frame):
 
         self.e4 = Entry(self, width=5)
         self.e4.grid(row=0, column=8, padx=10)
+    
+    def set_manual(self, ee_dict):
+        setText(self.e1, ee_dict['day1'])
+        setText(self.e2, ee_dict['time1'])
+        setText(self.e3, ee_dict['day2'])
+        setText(self.e4, ee_dict['time2'])
 
     def get(self):
         return [self.e1.get(), self.e2.get(), self.e3.get(), self.e4.get()]

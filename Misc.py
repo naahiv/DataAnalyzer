@@ -74,6 +74,7 @@ class Profile:
             self.name = direct_init['name']
             self.crits = direct_init['crits']
             self.ee_dict = direct_init['ee']
+            self.daysToPull = direct_init['dtp']
         else:
             self.name = prof_dict['name']
             self.daysToPull = prof_dict['daysToPull']

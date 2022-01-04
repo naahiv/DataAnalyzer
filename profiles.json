@@ -41,41 +41,43 @@
     },
     {
         "name": "day 1 short test",
-        "daysToPull": 1,
+        "daysToPull": "1",
         "entry_exit": {
-            "day1": 1,
-            "time1": "9:32",
-            "day2": 1,
-            "time2": "15:55"
+            "day1": "1",
+            "time1": "15:59",
+            "day2": "1",
+            "time2": "9:31"
         },
         "criteria": [
             {
                 "type": 1,
                 "comp": "<",
                 "input_field": "Avg Vol 1 Mo",
-                "value": 1200000
+                "value": "1200000"
             }
         ]
     },
     {
         "name": "cont incr day 1 2",
-        "daysToPull": 3,
+        "daysToPull": "2",
         "criteria": [
             {
                 "type": 0,
-                "day1": 1,
+                "day1": "1",
                 "time1": "9:31",
                 "comp": "<",
-                "day2": 1,
-                "time2": "15:59"
+                "day2": "1",
+                "time2": "15:59",
+                "by_perc": 1.1
             },
             {
                 "type": 0,
-                "day1": 1,
+                "day1": "2",
                 "time1": "9:31",
                 "comp": "<",
-                "day2": 1,
-                "time2": "15:59"
+                "day2": "2",
+                "time2": "15:59",
+                "by_perc": 1.2
             }
         ]
     }
