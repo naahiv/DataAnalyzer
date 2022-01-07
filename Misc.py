@@ -1,4 +1,5 @@
 import json
+import os.path as op
 
 class VisualCriteria:
     """
@@ -91,18 +92,28 @@ class Profile:
         prof_dict["criteria"] = [crit.export_to_dict() for crit in self.crits]
         return prof_dict
 
+home = op.expanduser('~')
+fp = op.join(home, 'profiles.json')
+
 class ProfileList:
     def __init__(self, json_arr):
         self.prof_list = [Profile(prof_dict) for prof_dict in json_arr]
 
     def get_profile_list():
-        fp = 'profiles.json'
-        json_file = open(fp, 'r')
-        json_arr = json.load(json_file)
-        return ProfileList(json_arr)
+        try:
+            json_file = open(fp, 'r')
+            json_arr = json.load(json_file)
+            return ProfileList(json_arr)
+        except FileNotFoundError:
+            print('creating local profiles.json file')
+            src = open('profiles.json', 'r')
+            dest = open(fp, 'w')
+            dest.write(src.read())
+            src.close()
+            dest.close()
+            return ProfileList.get_profile_list()
 
     def export_profile_list(self):
-        fp = 'profiles.json'
         dArray = [prof.export_to_dict() for prof in self.prof_list]
         json_file = open(fp, 'w')
         json.dump(dArray, json_file, indent = 4)
