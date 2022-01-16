@@ -63,53 +63,63 @@ class DataCollectorInterface:
         strategies = []
         times = []
         for crit in criteria_list:
-            if crit.type == 0: # regular strategy
-                str1 = f'{crit.day1} - {crit.time1}'
-                str2 = f'{crit.day2} - {crit.time2}'
-                times += [crit.time1, crit.time2]
-                if crit.by_perc == None:
-                    if crit.comp == '<':
-                        strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2]
-                        strategies.append(dc.BooleanStrategy(strat_func))
-                    elif crit.comp == '>':
-                        strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2]
-                        strategies.append(dc.BooleanStrategy(strat_func))
-                    else: # = sign
-                        strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
-                        strategies.append(dc.BooleanStrategy(strat_func))
-                else:
-                    if crit.comp == '<':
-                        strat_func = lambda data, str1=str1, str2=str2, crit=crit: data[str1] < data[str2] * (1 - crit.by_perc / 100)
-                        strategies.append(dc.BooleanStrategy(strat_func))
-                    elif crit.comp == '>':
-                        strat_func = lambda data, str1=str1, str2=str2, crit=crit: data[str1] > data[str2] * (1 + crit.by_perc / 100)
-                        strategies.append(dc.BooleanStrategy(strat_func))
-                    else: # = sign
-                        strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
-                        strategies.append(dc.BooleanStrategy(strat_func))
+            if type(crit) == list: # or clause
+                or_clause_list, or_clause_times = DataCollectorInterface.create_strategies(crit)
+                def strat_func(data, or_clause_list=or_clause_list):
+                    for b_strat in or_clause_list:
+                        if b_strat.apply(data):
+                            return True
+                    return False
+                strategies.append(dc.BooleanStrategy(strat_func))
+                times += or_clause_times
+            else:
+                if crit.type == 0: # regular strategy
+                    str1 = f'{crit.day1} - {crit.time1}'
+                    str2 = f'{crit.day2} - {crit.time2}'
+                    times += [crit.time1, crit.time2]
+                    if crit.by_perc == None:
+                        if crit.comp == '<':
+                            strat_func = lambda data, str1=str1, str2=str2: data[str1] < data[str2]
+                            strategies.append(dc.BooleanStrategy(strat_func))
+                        elif crit.comp == '>':
+                            strat_func = lambda data, str1=str1, str2=str2: data[str1] > data[str2]
+                            strategies.append(dc.BooleanStrategy(strat_func))
+                        else: # = sign
+                            strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
+                            strategies.append(dc.BooleanStrategy(strat_func))
+                    else:
+                        if crit.comp == '<':
+                            strat_func = lambda data, str1=str1, str2=str2, crit=crit: data[str1] < data[str2] * (1 - crit.by_perc / 100)
+                            strategies.append(dc.BooleanStrategy(strat_func))
+                        elif crit.comp == '>':
+                            strat_func = lambda data, str1=str1, str2=str2, crit=crit: data[str1] > data[str2] * (1 + crit.by_perc / 100)
+                            strategies.append(dc.BooleanStrategy(strat_func))
+                        else: # = sign
+                            strat_func = lambda data, str1=str1, str2=str2: data[str1] == data[str2]
+                            strategies.append(dc.BooleanStrategy(strat_func))
 
-            elif crit.type == 1: # value strategy
-                if crit.comp == '<':
-                    def strat_func(data, crit=crit):
-                        try:
-                            return int(data[crit.input_field]) < int(crit.value)
-                        except:
-                            return False
-                    strategies.append(dc.BooleanStrategy(strat_func))
-                elif crit.comp == '>':
-                    def strat_func(data, crit=crit):
-                        try:
-                            return int(data[crit.input_field]) > int(crit.value)
-                        except:
-                            return False
-                    strategies.append(dc.BooleanStrategy(strat_func))
-                else: # = sign
-                    def strat_func(data, crit=crit):
-                        try:
-                            return data[crit.input_field] == crit.value
-                        except:
-                            return False
-                    strategies.append(dc.BooleanStrategy(strat_func))
+                elif crit.type == 1: # value strategy
+                    if crit.comp == '<':
+                        def strat_func(data, crit=crit):
+                            try:
+                                return int(data[crit.input_field]) < int(crit.value)
+                            except:
+                                return False
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                    elif crit.comp == '>':
+                        def strat_func(data, crit=crit):
+                            try:
+                                return int(data[crit.input_field]) > int(crit.value)
+                            except:
+                                return False
+                        strategies.append(dc.BooleanStrategy(strat_func))
+                    else: # = sign
+                        def strat_func(data, crit=crit):
+                            try:
+                                return data[crit.input_field] == crit.value
+                            except:
+                                return False
+                        strategies.append(dc.BooleanStrategy(strat_func))
         return strategies, list(set(times))
     
     def time_order(t_list):
