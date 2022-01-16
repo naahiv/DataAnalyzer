@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 from CriteriaSelector import *
 from ProfileSelector import *
@@ -67,11 +68,13 @@ class App(Frame):
         def run_threaded_process():
             self.progress.grid(row=2, column=0)
             self.progress.start()
-            out_val = DataCollectorInterface.run_analysis(options, criteria, entry_exit)
+            out_val, perf_done = DataCollectorInterface.run_analysis(options, criteria, entry_exit)
             self.progress.stop()
             self.progress.grid_forget()
             if not out_val == None:
                 messagebox.showinfo("Success Rate", f'The overall sucess rate of this strategy was {out_val}%')
+            perf_done()
+
 
         threading.Thread(target=run_threaded_process).start()
         print(criteria, options)
