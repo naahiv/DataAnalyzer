@@ -3,9 +3,9 @@ from MeasurementTypes import *
 from Misc import VisualCriteria
 
 class CriteriaSelector(Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, or_window=False):
         Frame.__init__(self, parent)
-
+        self.or_window = or_window
         self.crit_list = []
 
         self.button1 = Button(self, text="Add New Criteria", command=self.create_new_crit)
@@ -22,6 +22,8 @@ class CriteriaSelector(Frame):
             meas.switch(0)
         elif new_val == 'Input Value':
             meas.switch(1)
+        elif new_val == 'OR Clause':
+            meas.switch(2)
 
     def printAll(self):
         print(len(self.crit_list))
@@ -48,7 +50,10 @@ class CriteriaSelector(Frame):
 
         optState = StringVar(self)
         optState.set('Price')
-        optMenu = OptionMenu(self, optState, 'Price', 'Input Value', command=lambda new_val: self.switch_crit(price_m, new_val))
+        opts_list = ['Price', 'Input Value']
+        if not self.or_window:
+            opts_list.append('OR Clause')
+        optMenu = OptionMenu(self, optState, *opts_list, command=lambda new_val: self.switch_crit(price_m, new_val))
 
         m_label = Label(self, text=f'Measurement #{i}: ')
 

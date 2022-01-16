@@ -1,4 +1,5 @@
 from tkinter import *
+from CriteriaSelector import *
 
 def setText(entry, text):
     entry.delete(0, 'end')
@@ -14,10 +15,11 @@ class Measurement(Frame):
         self.meas.destroy()
         if to == 0:
             self.meas = PriceMeasurement(self)
-            self.meas.grid(row=0, column=0)
         elif to == 1:
             self.meas = InputMeasurement(self)
-            self.meas.grid(row=0, column=0)
+        elif to == 2:
+            self.meas = OrMeasurement(self)
+        self.meas.grid(row=0, column=0)
 
     def get(self):
         return self.meas.get()
@@ -35,10 +37,12 @@ class Measurement(Frame):
             if crit.by_perc:
                 setText(self.meas.e5, crit.by_perc)
             self.meas.compState.set(' ' + crit.comp + ' ')
-        else:
+        elif crit.type == 1:
             setText(self.meas.e1, crit.input_field)
             setText(self.meas.e2, crit.value)
             self.meas.compState.set(' ' + crit.comp + ' ')
+        elif crit.type == 2:
+            self.meas.current_state = crit
 
 class PriceMeasurement(Frame):
     def __init__(self, parent):
@@ -122,3 +126,62 @@ class InputMeasurement(Frame):
         self.e1.destroy()
         self.comp.destroy()
         self.e2.destroy()
+
+class OrMeasurement(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+
+        self.b1 = Button(self, text='Open OR Clause', command=self.open_or_window)
+        self.b1.grid(row=0, column=0)
+
+        self.current_state = []
+
+    def open_or_window(self):
+        self.popup = Toplevel(self)
+        self.popup.title("OR Clause")
+        self.popup.geometry("1400x800")
+        self.or_window = OrWindow(self.popup, self.on_saved)
+        self.or_window.start_with_meas(self.current_state)
+        self.or_window.grid(row=0, column=0)
+        self.popup.focus_set()
+
+    def on_saved(self):
+        self.current_state = self.or_window.get()
+        self.popup.destroy()
+
+    def get(self):
+        return self.current_state
+
+    def destroy(self):
+        self.b1.destroy()
+        if self.popup.winfo_exists():
+            self.popup.destroy() # emergency exit
+
+class OrWindow(Frame):
+    def __init__(self, parent, on_save):
+        Frame.__init__(self, parent)
+
+        self.crit_label = Label(self, text='Select OR Clause', font='none 12')
+        self.crit_label.grid(row=0, column=0, pady=15)
+
+        self.crit_selector = CriteriaSelector(self, True)
+        self.crit_selector.grid(row=1, column=0, rowspan=5)
+
+        self.save_button = Button(self, text='Save OR Clause', command=on_save)
+        self.save_button.grid(row=7, column=0, pady=15)
+
+    def get(self):
+        return self.crit_selector.get()
+
+    def start_with_meas(self, crits):
+        self.crit_selector.update_from_crit_list(crits)
+
+
+if __name__ == '__main__':
+    from ctypes import windll
+    windll.shcore.SetProcessDpiAwareness(1)
+
+    root = Tk()
+    root.geometry("900x600")
+    OrMeasurement(root).grid(row=0, column=0)
+    root.mainloop() 
