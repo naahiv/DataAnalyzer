@@ -82,18 +82,26 @@ class CriteriaSelector(Frame):
             row = self.row_list[-1]
             price_m = row[2]
             optState = self.option_states[-1]
-            if crit.type == 1:
-                optState.set('Input Value')
-                self.switch_crit(price_m, 'Input Value')
+            if type(crit) == list:
+                optState.set('OR Clause')
+                self.switch_crit(price_m, 'OR Clause')
+            else:
+                if crit.type == 1:
+                    optState.set('Input Value')
+                    self.switch_crit(price_m, 'Input Value')
             price_m.data_setup(crit)
 
     def get(self):
         """
-        Returns a list of VisualCriteria objects, one for each row in the criteria section of the app.
+        Returns a list of VisualCriteria objects (or a list for OR clauses), one for each row in the criteria section of the app.
         """
         final_list = []
         for crit in self.crit_list:
-            final_list.append(VisualCriteria(crit.get()))
+            outp = crit.get()
+            if type(outp[0]) == str:
+                final_list.append(VisualCriteria(outp))
+            else:
+                final_list.append(outp)
         return final_list
 
 

@@ -1,5 +1,5 @@
 from tkinter import *
-from CriteriaSelector import *
+import CriteriaSelector as CriSel
 
 def setText(entry, text):
     entry.delete(0, 'end')
@@ -29,20 +29,21 @@ class Measurement(Frame):
 
     def data_setup(self, crit):
         # already switced
-        if crit.type == 0:
-            setText(self.meas.e1, crit.day1)
-            setText(self.meas.e2, crit.time1)
-            setText(self.meas.e3, crit.day2)
-            setText(self.meas.e4, crit.time2)
-            if crit.by_perc:
-                setText(self.meas.e5, crit.by_perc)
-            self.meas.compState.set(' ' + crit.comp + ' ')
-        elif crit.type == 1:
-            setText(self.meas.e1, crit.input_field)
-            setText(self.meas.e2, crit.value)
-            self.meas.compState.set(' ' + crit.comp + ' ')
-        elif crit.type == 2:
+        if type(crit) == list:
             self.meas.current_state = crit
+        else:
+            if crit.type == 0:
+                setText(self.meas.e1, crit.day1)
+                setText(self.meas.e2, crit.time1)
+                setText(self.meas.e3, crit.day2)
+                setText(self.meas.e4, crit.time2)
+                if crit.by_perc:
+                    setText(self.meas.e5, crit.by_perc)
+                self.meas.compState.set(' ' + crit.comp + ' ')
+            elif crit.type == 1:
+                setText(self.meas.e1, crit.input_field)
+                setText(self.meas.e2, crit.value)
+                self.meas.compState.set(' ' + crit.comp + ' ')
 
 class PriceMeasurement(Frame):
     def __init__(self, parent):
@@ -154,8 +155,9 @@ class OrMeasurement(Frame):
 
     def destroy(self):
         self.b1.destroy()
-        if self.popup.winfo_exists():
-            self.popup.destroy() # emergency exit
+        if hasattr(self, 'popup'):
+            if self.popup.winfo_exists():
+                self.popup.destroy() # emergency exit
 
 class OrWindow(Frame):
     def __init__(self, parent, on_save):
@@ -164,7 +166,7 @@ class OrWindow(Frame):
         self.crit_label = Label(self, text='Select OR Clause', font='none 12')
         self.crit_label.grid(row=0, column=0, pady=15)
 
-        self.crit_selector = CriteriaSelector(self, True)
+        self.crit_selector = CriSel.CriteriaSelector(self, True)
         self.crit_selector.grid(row=1, column=0, rowspan=5)
 
         self.save_button = Button(self, text='Save OR Clause', command=on_save)

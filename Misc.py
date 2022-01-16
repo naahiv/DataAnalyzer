@@ -76,9 +76,14 @@ class Profile:
             self.ee_dict = direct_init['ee']
             self.daysToPull = direct_init['dtp']
         else:
+            self.crits = []
             self.name = prof_dict['name']
             self.daysToPull = prof_dict['daysToPull']
-            self.crits = [VisualCriteria(None, crit_dict) for crit_dict in prof_dict['criteria']]
+            for crit_dict in prof_dict['criteria']:
+                if type(crit_dict) == list:
+                    self.crits.append([VisualCriteria(None, inner_crit_dict) for inner_crit_dict in crit_dict])
+                else:
+                    self.crits.append(VisualCriteria(None, crit_dict))
             self.ee_dict = None
             if 'entry_exit' in prof_dict:
                 self.ee_dict = prof_dict['entry_exit']
@@ -89,7 +94,12 @@ class Profile:
         prof_dict['daysToPull'] = self.daysToPull
         if self.ee_dict:
             prof_dict['entry_exit'] = self.ee_dict
-        prof_dict["criteria"] = [crit.export_to_dict() for crit in self.crits]
+        prof_dict['criteria'] = []
+        for crit in self.crits:
+            if type(crit) == list: # or clause
+                prof_dict['criteria'].append([inner_crit.export_to_dict() for inner_crit in crit])
+            else:
+                prof_dict['criteria'].append(crit.export_to_dict())
         return prof_dict
 
 home = op.expanduser('~')
