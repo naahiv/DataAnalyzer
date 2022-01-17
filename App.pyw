@@ -1,3 +1,13 @@
+from Misc import *
+import sys
+from datetime import datetime
+from pytz import timezone
+now = datetime.now(tz=timezone('US/Eastern'))
+s = f"""
+---------------------------------------------------
+Output for Data Analyzer run at {now.strftime("%H:%M:%S")} EST on {now.strftime("%Y-%m-%d")}:"""
+print(s)
+
 import time
 from tkinter import *
 from CriteriaSelector import *
@@ -6,10 +16,10 @@ from FileInputPane import *
 from DataCollectorInterface import *
 from tkinter.ttk import Progressbar
 from EntryExitTester import *
-from Misc import *
 from MeasurementTypes import setText
 import threading
 from tkinter import messagebox
+
 
 class App(Frame):
     def __init__(self, parent):
@@ -33,12 +43,12 @@ class App(Frame):
         self.entry_exit = EntryExitTester(self)
         self.entry_exit.grid(row=2, column=0, pady=20)
 
-        self.entry_exit = EntryExitTester(self)
-        self.entry_exit.grid(row=2, column=0, pady=20)
-
         self.file_input_pane.add_to_run(self.run_collection)
 
         self.progress = Progressbar(self, orient=HORIZONTAL, length=100,  mode='indeterminate')
+
+        self.logfile_button = Button(self, text='Open Log File', command=open_log_file)
+        self.logfile_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
 
     def get_meas_info(self):
         daysToPull = self.file_input_pane.opt_sel.e1.get()

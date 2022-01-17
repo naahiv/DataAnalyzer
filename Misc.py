@@ -1,5 +1,20 @@
 import json
 import os.path as op
+import os
+import sys
+home = op.expanduser('~')
+log_fp = op.join(home, 'da_output.log')
+
+def begin_output_log():
+    logfile = open(log_fp, 'a')
+    sys.stdout = logfile
+    sys.stderr = logfile
+
+def open_log_file():
+    os.startfile(log_fp)
+
+if sys.argv[0] == 'App.pyw':
+    begin_output_log()
 
 class VisualCriteria:
     """
@@ -102,7 +117,6 @@ class Profile:
                 prof_dict['criteria'].append(crit.export_to_dict())
         return prof_dict
 
-home = op.expanduser('~')
 fp = op.join(home, 'profiles.json')
 
 class ProfileList:
