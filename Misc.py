@@ -13,7 +13,7 @@ def begin_output_log():
 def open_log_file():
     os.startfile(log_fp)
 
-if sys.argv[0] == 'App.pyw':
+if op.basename(sys.argv[0]) == 'App.pyw':
     begin_output_log()
 
 class VisualCriteria:
