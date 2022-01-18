@@ -2,8 +2,18 @@ import json
 import os.path as op
 import os
 import sys
+import io
 home = op.expanduser('~')
 log_fp = op.join(home, 'da_output.log')
+
+class CustomIO(io.StringIO):
+    def __init__(self):
+        super().__init__(self)
+        self.logfile = open(log_fp, 'a')
+    def write(self):
+        pass
+    def close(self):
+        
 
 def begin_output_log():
     logfile = open(log_fp, 'a')
