@@ -8,22 +8,36 @@ log_fp = op.join(home, 'da_output.log')
 
 class CustomIO(io.StringIO):
     def __init__(self):
-        super().__init__(self)
+        io.StringIO.__init__(self)
         self.logfile = open(log_fp, 'a')
-    def write(self):
-        pass
+
+    def fix_changes(self):
+        self.logfile.close()
+        self.logfile = open(log_fp, 'a')
+
+    def write(self, s):
+        io.StringIO.write(self, s)
+        self.logfile.write(self.getvalue())
+        self.truncate(0)
+        self.fix_changes()
+
     def close(self):
-        
+        if not self.logfile.closed:
+            self.logfile.close()
+        io.StringIO.close(self)
+
+iostream = CustomIO()
 
 def begin_output_log():
-    logfile = open(log_fp, 'a')
-    sys.stdout = logfile
-    sys.stderr = logfile
+    sys.stdout = iostream
+    sys.stderr = iostream
 
 def open_log_file():
+    iostream.fix_changes()
     os.startfile(log_fp)
 
 def revert_to_print_log():
+    iostream.close()
     sys.stdout = sys.__stdout__
     sys.stderr = sys.__stderr__
 
