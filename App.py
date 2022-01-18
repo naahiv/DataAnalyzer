@@ -17,6 +17,7 @@ from DataCollectorInterface import *
 from tkinter.ttk import Progressbar
 from EntryExitTester import *
 from MeasurementTypes import setText
+from ErrorReport import ErrorReport
 import threading
 from tkinter import messagebox
 
@@ -49,6 +50,19 @@ class App(Frame):
 
         self.logfile_button = Button(self, text='Open Log File', command=open_log_file)
         self.logfile_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
+
+        self.error_report_button = Button(self, text='Send Error Report', command=self.send_error_report)
+        self.error_report_button.grid(row=4, column=0, sticky=W, pady=15, padx=5)
+
+    def send_error_report(self):
+        json_config = self.get_meas_info().export_to_dict()
+
+        json_config.pop('name')
+        input_fp, opts, output_fp = self.file_input_pane.get()
+        json_config['day1_date'] = opts.dayOneDate
+        report = ErrorReport(self, json_config, input_fp, output_fp)
+        report.send_report()
+        messagebox.showinfo('Success', f'The error was successfully reported with a screenshot, most recent input and output files, and current configuration. The developer will get back to you soon.')
 
     def get_meas_info(self):
         daysToPull = self.file_input_pane.opt_sel.e1.get()
