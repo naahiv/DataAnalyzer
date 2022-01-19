@@ -17,7 +17,7 @@ from DataCollectorInterface import *
 from tkinter.ttk import Progressbar
 from EntryExitTester import *
 from MeasurementTypes import setText
-from ErrorReport import ErrorReport
+from ErrorReport import *
 import threading
 from tkinter import messagebox
 
@@ -55,14 +55,18 @@ class App(Frame):
         self.error_report_button.grid(row=4, column=0, sticky=W, pady=15, padx=5)
 
     def send_error_report(self):
-        json_config = self.get_meas_info().export_to_dict()
+        def on_send(sel_arr):
+            json_config = self.get_meas_info().export_to_dict()
 
-        json_config.pop('name')
-        input_fp, opts, output_fp = self.file_input_pane.get()
-        json_config['day1_date'] = opts.dayOneDate
-        report = ErrorReport(self, json_config, input_fp, output_fp)
-        report.send_report()
-        messagebox.showinfo('Success', f'The error was successfully reported with a screenshot, most recent input and output files, and current configuration. The developer will get back to you soon.')
+            json_config.pop('name')
+            input_fp, opts, output_fp = self.file_input_pane.get()
+            json_config['day1_date'] = opts.dayOneDate
+            report = ErrorReport(self, json_config, input_fp, output_fp, sel_arr[0], sel_arr[1])
+            report.send_report()
+
+            messagebox.showinfo('Success', f'The error was successfully reported with a screenshot, most recent input and output files, and current configuration. The developer will get back to you soon.')
+
+        self.error_popup = create_error_report_popup(self, on_send)
 
     def get_meas_info(self):
         daysToPull = self.file_input_pane.opt_sel.e1.get()
