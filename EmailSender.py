@@ -9,7 +9,7 @@ from email import encoders
 
 def send_mail(send_from, send_to, subject, message, files=[],
         server="localhost", port=587, username='', password='',
-        use_tls=True):
+        send_cc=[], use_tls=True):
     """Compose and send email with provided info and attachments.
 
     Args:
@@ -27,6 +27,7 @@ def send_mail(send_from, send_to, subject, message, files=[],
     msg = MIMEMultipart()
     msg['From'] = send_from
     msg['To'] = COMMASPACE.join(send_to)
+    msg['Cc'] = COMMASPACE.join(send_cc)
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = subject
 

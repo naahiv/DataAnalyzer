@@ -54,7 +54,9 @@ class ErrorReport:
         pwd = 'naahivda7'
 
         paths = self.att_fps + [zip_fp]
-        recip ='vihaandheer@gmail.com' 
+        recip = 'vihaandheer@gmail.com' 
+        cc_addrs = ['naahivrheed@gmail.com']
+        # cc_addrs = ['eric@multichannelinsights.com']
         server = 'smtp.gmail.com'
 
         user_title = self.error_title
@@ -80,7 +82,7 @@ class ErrorReport:
         </html>
         """
 
-        send_mail(name, [recip], subject, message, paths, 'smtp.gmail.com', 587, login, pwd)
+        send_mail(name, [recip], subject, message, paths, 'smtp.gmail.com', 587, login, pwd, cc_addrs)
         print('email sent')
 
 class ErrorReportBox(Frame):
