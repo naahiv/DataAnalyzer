@@ -57,8 +57,8 @@ class ErrorReport:
 
         paths = self.att_fps + [zip_fp]
         recip = 'vihaandheer@gmail.com' 
-        cc_addrs = ['naahivrheed@gmail.com']
-        # cc_addrs = ['eric@multichannelinsights.com']
+        cc_addrs = ['eric@multichannelinsights.com']
+        # cc_addrs = ['naahivrheed@gmail.com']
         server = 'smtp.gmail.com'
 
         user_title = self.error_title
