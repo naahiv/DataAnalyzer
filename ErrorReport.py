@@ -18,6 +18,7 @@ class ErrorReport:
         self.output_fp = output_fp
         self.error_title = title
         self.error_message = message
+        self.delete_tmp_files()
         json_file = open(json_fp, 'w')
         json.dump(current_json_config, json_file, indent=4)
         json_file.close()
@@ -35,9 +36,9 @@ class ErrorReport:
         zip_file.close()
 
     def delete_tmp_files(self):
-        os.remove(img_fp)
-        os.remove(json_fp)
-        os.remove(zip_fp)
+        for fp in [img_fp, json_fp, zip_fp]:
+            if op.exists(fp):
+                os.remove(fp)
     
     def take_screenshot(self):
         cap = tkcap.CAP(self.root)

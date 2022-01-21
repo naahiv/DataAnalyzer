@@ -6,18 +6,28 @@ import io
 home = op.expanduser('~')
 log_fp = op.join(home, 'da_output.log')
 
+def line_filter(s):
+    if not s == '\n':
+        return '\n'.join(filter(''.__ne__, s.split('\n')))
+    else:
+        return ''
+
 class CustomIO(io.StringIO):
     def __init__(self):
         io.StringIO.__init__(self)
+        self.check_for_clear()
         self.logfile = open(log_fp, 'a')
 
     def fix_changes(self):
         self.logfile.close()
         self.logfile = open(log_fp, 'a')
 
+    def check_for_clear(self):
+        pass
+
     def write(self, s):
         io.StringIO.write(self, s)
-        self.logfile.write(self.getvalue())
+        self.logfile.write(line_filter(self.getvalue()))
         self.truncate(0)
         self.fix_changes()
 
