@@ -5,6 +5,7 @@ import os.path as op
 from zipfile import ZipFile
 import json
 from tkinter import *
+from mss import mss
 home = op.expanduser('~')
 zip_fp = op.join(home, 'da_error_tmp.zip')
 log_fp = op.join(home, 'da_output.log')
@@ -41,8 +42,8 @@ class ErrorReport:
                 os.remove(fp)
     
     def take_screenshot(self):
-        cap = tkcap.CAP(self.root)
-        cap.capture(img_fp)
+        with mss() as sct:
+            sct.shot(mon=-1, output=img_fp)
 
     def send_report(self):
         self.gather_report()
@@ -99,7 +100,7 @@ class ErrorReportBox(Frame):
         self.l2 = Label(self, text='Error Report Message')
         self.l2.grid(row=2, column=0, sticky=W, pady=5)
 
-        self.e2 = Text(self, height=5, width=45)
+        self.e2 = Text(self, height=5, width=45, font='none 9')
         self.e2.grid(row=3, column=0, columnspan=2, sticky=W, pady=10)
 
         self.b1 = Button(self, text='Cancel', command=on_cancel)

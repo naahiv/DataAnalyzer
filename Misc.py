@@ -10,7 +10,7 @@ LOG_KB_PUSHBACK = 128
 
 def line_filter(s, ec='\n'):
     if not s == ec:
-        return '\n'.join(filter(''.__ne__, s.split(ec)))
+        return '\n'.join(filter(''.__ne__, s.split(ec))).replace('#', '')
     else:
         return ''
 

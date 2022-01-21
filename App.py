@@ -62,9 +62,10 @@ class App(Frame):
             input_fp, opts, output_fp = self.file_input_pane.get()
             json_config['day1_date'] = opts.dayOneDate
             report = ErrorReport(self, json_config, input_fp, output_fp, sel_arr[0], sel_arr[1])
+            time.sleep(250.0 / 1000.0)
             report.send_report()
 
-            messagebox.showinfo('Success', f'The error was successfully reported with a screenshot, most recent input and output files, and current configuration. The developer will get back to you soon.')
+            messagebox.showinfo('Success!', f'The error was successfully reported to the developer, who will likely get back to you soon!')
 
         self.error_popup = create_error_report_popup(self, on_send)
 
