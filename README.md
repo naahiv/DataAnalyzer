@@ -23,4 +23,10 @@ Necessities:
 - Delete DACrypter once this is complete.
 
 ## Installing Versions
-To install a version, simply go to the releases section of this GitHub page, and choose the latest version's installer file. Download it and run the installer, which will install in your `Program Files (x86)` directory by default. If this is your first time using the software, open this directory, then open `App`, and place your `td_auth.txt` file here. Installing future versions will not require this step.
+To install a version, simply:
+- Go to the releases section of this GitHub page
+- Choose the latest version's installer file. Download it and run the installer, which will install in your `Program Files (x86)` directory by default
+- If this is your first time using the software:
+  - Open this directory, then open `App`, and place your `td_auth.txt` file here. 
+  - Place the starter `profiles.json` file in your home directory (e.g. `C:\Users\myusername\`)
+    - Installing future versions will not require these steps.
