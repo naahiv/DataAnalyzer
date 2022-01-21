@@ -5,10 +5,12 @@ import sys
 import io
 home = op.expanduser('~')
 log_fp = op.join(home, 'da_output.log')
+LOG_KB_LIMIT = 512
+LOG_KB_PUSHBACK = 128
 
-def line_filter(s):
-    if not s == '\n':
-        return '\n'.join(filter(''.__ne__, s.split('\n')))
+def line_filter(s, ec='\n'):
+    if not s == ec:
+        return '\n'.join(filter(''.__ne__, s.split(ec)))
     else:
         return ''
 
@@ -23,11 +25,13 @@ class CustomIO(io.StringIO):
         self.logfile = open(log_fp, 'a')
 
     def check_for_clear(self):
-        pass
+        if op.getsize(log_fp) >= 1000*LOG_KB_LIMIT:
+            with open(log_fp, 'wb') as logfile:
+                logfile.write(logfile.read()[1000*LOG_KB_PUSHBACK:])
 
     def write(self, s):
         io.StringIO.write(self, s)
-        self.logfile.write(line_filter(self.getvalue()))
+        self.logfile.write(line_filter(self.getvalue(), '\x00'))
         self.truncate(0)
         self.fix_changes()
 
@@ -180,3 +184,6 @@ class ProfileList:
         dArray = [prof.export_to_dict() for prof in self.prof_list]
         json_file = open(fp, 'w')
         json.dump(dArray, json_file, indent = 4)
+
+if __name__ == '__main__':
+    revert_to_print_log()
