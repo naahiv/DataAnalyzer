@@ -1,11 +1,6 @@
 import time
 import td_data_collector as dc
-from DecrypterModule import get_key_and_token
-api_key, oauth_token = get_key_and_token()
-# print(api_key)
-# print(oauth_token)
 import os
-dc.init_auth_data(api_key, oauth_token)
 
 class DataCollectorInterface:
     def run_analysis(options, criteria, en_ex):
