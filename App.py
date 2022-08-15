@@ -48,11 +48,14 @@ class App(Frame):
 
         self.progress = Progressbar(self, orient=HORIZONTAL, length=100,  mode='indeterminate')
 
+        self.order_button = Button(self, text='Open Order Sender', command=self.open_order_window)
+        self.order_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
+
         self.logfile_button = Button(self, text='Open Log File', command=open_log_file)
-        self.logfile_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
+        self.logfile_button.grid(row=4, column=0, sticky=W, pady=15, padx=5)
 
         self.error_report_button = Button(self, text='Send Error Report', command=self.send_error_report)
-        self.error_report_button.grid(row=4, column=0, sticky=W, pady=15, padx=5)
+        self.error_report_button.grid(row=5, column=0, sticky=W, pady=15, padx=5)
 
     def send_error_report(self):
         def on_send(sel_arr):
@@ -77,6 +80,10 @@ class App(Frame):
         if DataCollectorInterface.validate_ee(ee):
             ee_dict = {'day1': ee[0], 'time1':ee[1], 'day2': ee[2], 'time2': ee[3]}
         return Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
+
+    def open_order_window(self):
+        # do something here
+        pass
 
     def switch_to_profile(self, prof):
         if prof.daysToPull:

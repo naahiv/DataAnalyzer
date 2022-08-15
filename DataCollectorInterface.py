@@ -3,6 +3,22 @@ import td_data_collector as dc
 import os
 
 class DataCollectorInterface:
+    def create_batch_market_order(symbols, amts):
+        sender = dc.OrderSender.create_order_sender()
+        return sender.create_batch_market_order()
+
+    def get_order_status(order_id):
+        sender = dc.OrderSender.create_order_sender()
+        sender.get_order_status(order_id)
+
+    def cancel_order(order_id):
+        sender = dc.OrderSender.create_order_sender()
+        sender.cancel_order(order_id)
+
+    def create_batch_closes(self, order_ids):
+        sender = dc.OrderSender.create_order_sender()
+        sender.create_batch_closes(order_ids)
+
     def run_analysis(options, criteria, en_ex):
 
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
