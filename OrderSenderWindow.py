@@ -64,14 +64,17 @@ class OrderSenderWindow(Frame):
     def stage_one(self):
         # in this step, we send market BUYs for each of the symbols
         self.l6.config(text='SUBMITTED')
-        self.order_id_list = dci.create_batch_market_order(self.symbols, self.per_amt)
+        self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt))
 
     def stage_two(self):
         # in this step, we cancel all unfilled orders
         self.l7.config(text='SUBMITTED')
+        pass
+        """
         for order_id in self.order_id_list:
             if not dci.get_order_status(order_id) == 'FILLED':
                 dci.cancel_order(order_id)
+        """
 
     def stage_three(self):
         # in this step, we close all remaining positions
@@ -105,6 +108,13 @@ class OrderSenderWindow(Frame):
             self.start_timer(cancel_time, second_callback)
         self.start_timer(start_time, nested_callback)
 
+def create_order_sender_popup(root):
+    popup = Toplevel(root)
+    popup.title('Order Sender')
+    popup.geometry("900x1000")
+    senderWindow = OrderSenderWindow(popup)
+    senderWindow.grid(row=0, column=0)
+    return senderWindow
 
 if __name__ == '__main__':
     from ctypes import windll

@@ -18,9 +18,9 @@ from tkinter.ttk import Progressbar
 from EntryExitTester import *
 from MeasurementTypes import setText
 from ErrorReport import *
+from OrderSenderWindow import *
 import threading
 from tkinter import messagebox
-
 
 class App(Frame):
     def __init__(self, parent):
@@ -82,8 +82,7 @@ class App(Frame):
         return Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
 
     def open_order_window(self):
-        # do something here
-        pass
+        order_window = create_order_sender_popup(self)
 
     def switch_to_profile(self, prof):
         if prof.daysToPull:

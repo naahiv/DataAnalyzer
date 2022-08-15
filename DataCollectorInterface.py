@@ -2,10 +2,14 @@ import time
 import td_data_collector as dc
 import os
 
+with open('td_auth.txt', 'r') as f:
+    acct_num, refresh_token = [l.strip('\n') for l in f.readlines()]
+    dc.init_auth_data(acct_num, refresh_token)
+
 class DataCollectorInterface:
     def create_batch_market_order(symbols, amts):
         sender = dc.OrderSender.create_order_sender()
-        return sender.create_batch_market_order()
+        return sender.create_batch_market_order(symbols, amts)
 
     def get_order_status(order_id):
         sender = dc.OrderSender.create_order_sender()
@@ -15,7 +19,7 @@ class DataCollectorInterface:
         sender = dc.OrderSender.create_order_sender()
         sender.cancel_order(order_id)
 
-    def create_batch_closes(self, order_ids):
+    def create_batch_closes(order_ids):
         sender = dc.OrderSender.create_order_sender()
         sender.create_batch_closes(order_ids)
 
