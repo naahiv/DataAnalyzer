@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['App.pyw'],
-             pathex=['D:\\Documents\\DataAnalyzer'],
+             pathex=['C:\\Users\\vihaa\\Documents\\DataAnalyzer'],
              binaries=[],
              datas=[],
              hiddenimports=[],
