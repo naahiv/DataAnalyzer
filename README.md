@@ -1,33 +1,29 @@
-# TD Data Analyzer
-## Instructions for Authentication setup
-(OUTDATED: THE FOLLOWING INSTRUCTIONS DO NOT WORK FOR LATEST VERSION...)
-Necessities:
-- A TD Ameritrade (bank) account
-- A TD developer account: register at <https://developer.tdameritrade.com/>.
-- The latest TD Data Analyzer software zip file
-
-#### Obtaining your API key
-- If you do not already have an App setup in your developer account, create one by following the standard wizard on the developer webpage. <http://localhost:8000/> can be used as a URL if needed.
-- Next, your product id can be found under the App page, which is your API key.
-- Store this for later.
-
-#### Obtaining your OAuth 2.0 Token
-- Once logged in to your developer account, choose a random TD API, and click the `Set` button at the bottom of the screen under OAuth 2.0.
-- Log in with your TD bank account details.
-- Click `Request` and then `Send`, and your token, beginning with `Bearer DK89FI24JRE...`, will appear.
-- Store this for later.
-
-#### Generating your `td_auth.txt` verification file.
-- Your API key and OAuth 2.0 token are stored locally in encrypted form to maximize security.
-- Open the executable labeled DACrypter and paste the key and token.
-- Click Encrypt. A file should appear in the directory which DACrypter is called `td_auth.txt`; save this file securely and do not share with anyone. The developer will *not* ask to see this file for debugging purposes.
-- Delete DACrypter once this is complete.
-
-## Installing Versions
+# Data Analyzer
+## Installation & Setup
+### Installing Versions
 To install a version, simply:
 - Go to the releases section of this GitHub page
-- Choose the latest version's installer file. Download it and run the installer, which will install in your `Program Files (x86)` directory by default
-- If this is your first time using the software:
-  - Open this directory, then open `App`, and place your `td_auth.txt` file here. 
-  - Place the starter `profiles.json` file in your home directory (e.g. `C:\Users\myusername\`)
-    - Installing future versions will not require these steps.
+- Choose the latest version's installer file. Download it and run the installer (named `DataAnalyzerInstallerXXX.exe`), which will install to your `Program Files (x86)` directory by default
+  - *Note: it is highly recommended to keep this as the installation directory. If you do not, see the next section to obtain your `td_auth.txt` file.*
+- If this is first time installing the software (i.e. you are not updating):
+  - Download the `profiles.json` file from the releases page and save to your home directory (e.g. `C:\Users\myusername\`). You will not have to do this when updating
+  - See the next section for setting up your authentication file
+
+### Setting up your TD Authentication File
+If this is your first install, complete the following steps to properly authenticate yourself into the TD Ameritrade system to allow Data Analyzer to place automated trades for you. If you do not have a TD Ameritrade trading acount or would not like to give this permission to Data Analyzer, skip these steps and go to the next subsection.
+- From the releases page, download and run the `DACrypter.exe` file
+- Get your TD account number from [https://invest.ameritrade.com/](https://invest.ameritrade.com/) or directly from the thinkorswim application; make sure this is the account you want to trade through DataAnalyzer with; paste the account number into the first field in the software
+- Click **Generate Refresh Token**, login into your TD Ameritrade account, complete any verification required, and choose **Allow**. The program should read `[REFRESH TOKEN CAPTURED]`
+- Click **Create Auth File**. This will generate a customized file named `td_auth.txt` and place it in your `Data Analyzer` app directory. **Do not** share this file: it can be used to trade from your TD account
+
+*Note: If you chose to install to different directory then the default, complete the following steps:*
+- Create a temporary subdirectory in your `Program Files (x86)` folder called `Data Analyzer`, and make a directory in that called `App`.
+- Complete the steps directly above - the `td_auth.txt` file will be generated in this temporary directory. 
+- Copy the `td_auth.txt` file into the chosen install directory. Make sure it is copied *into* the `App` folder
+
+*Note: if you do not want to use the TD automated trading feature/authenticate with TD, follow the steps below instead of the above:*
+- Open your install directory - if you used the default, it will be in your `Program Files (x86)` folder
+- Open the `App` subdirectory, and place a *blank* text file here named `td_auth.txt`.
+  - *Note that the software **will not** run without this step*
+  
+You only need to complete these steps upon the first installation, not every time you update. Note that the custom refresh token that you generated using DACrypter will expire every 90 days - in other words, you should reopen DACrypter and redo the above steps every 90 days to make sure you can continue using the software properly.
