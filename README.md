@@ -1,4 +1,5 @@
 # Data Analyzer
+Data Analyzer is a market data analysis tool meant for day/swing traders which utilizes the polygon.io data tool as well as TD Ameritrades APIs to create a customizable backtesting software. The primary usage of the software is to take lists of stock symbols from a specific date, pull data about that list for certain times, and filter the list based on certain criteria, as well as calculate success rates based on certain inputs. A secondary use case is to make the active trading process easier for traders who use a time-based strategy.
 ## Installation & Setup
 ### Installing Versions
 To install a version, simply:
@@ -27,3 +28,7 @@ If this is your first install, complete the following steps to properly authenti
   - *Note that the software **will not** run without this step*
   
 You only need to complete these steps upon the first installation, not every time you update. Note that the custom refresh token that you generated using DACrypter will expire every 90 days - in other words, you should reopen DACrypter and redo the above steps every 90 days to make sure you can continue using the software properly.
+
+## Usage & Examples
+### Getting Started
+The most basic use of Data Analyzer is as follows:
