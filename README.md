@@ -1,5 +1,6 @@
 # TD Data Analyzer
 ## Instructions for Authentication setup
+(OUTDATED: THE FOLLOWING INSTRUCTIONS DO NOT WORK FOR LATEST VERSION...)
 Necessities:
 - A TD Ameritrade (bank) account
 - A TD developer account: register at <https://developer.tdameritrade.com/>.
