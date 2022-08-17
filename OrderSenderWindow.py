@@ -69,12 +69,9 @@ class OrderSenderWindow(Frame):
     def stage_two(self):
         # in this step, we cancel all unfilled orders
         self.l7.config(text='SUBMITTED')
-        pass
-        """
         for order_id in self.order_id_list:
             if not dci.get_order_status(order_id) == 'FILLED':
                 dci.cancel_order(order_id)
-        """
 
     def stage_three(self):
         # in this step, we close all remaining positions
