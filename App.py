@@ -48,7 +48,7 @@ class App(Frame):
 
         self.progress = Progressbar(self, orient=HORIZONTAL, length=100,  mode='indeterminate')
 
-        self.order_button = Button(self, text='Open Order Sender', command=self.open_order_window)
+        self.order_button = Button(self, text='Open Order Sender', command=self.open_order_window, state=DISABLED)
         self.order_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
 
         self.logfile_button = Button(self, text='Open Log File', command=open_log_file)
@@ -58,6 +58,8 @@ class App(Frame):
         self.error_report_button.grid(row=5, column=0, sticky=W, pady=15, padx=5)
 
         self.recent_lookouts = []
+
+        self.check_for_auth_success()
 
     def send_error_report(self):
         def on_send(sel_arr):
@@ -111,6 +113,18 @@ class App(Frame):
 
         threading.Thread(target=run_threaded_process).start()
         print(criteria, options)
+
+    def check_for_auth_success(self):
+        if not GLOBAL_ACCT_INFO == None:
+            acct_num, trading_cash, liq_value = GLOBAL_ACCT_INFO
+            l1 = Label(self, text=f'Welcome, Account #{acct_num}')
+            l1.grid(row=6, column=0)
+
+            l2 = Label(self, text=f'Trading Cash: {trading_cash}\tLiquid Value: {liq_value}')
+            l2.grid(row=7, column=0)
+
+            self.order_button.configure(state=NORMAL)
+
 
 if __name__ == '__main__':
     from ctypes import windll

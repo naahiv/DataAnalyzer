@@ -2,9 +2,16 @@ import time
 import td_data_collector as dc
 import os
 
+global GLOBAL_ACCT_INFO
+GLOBAL_ACCT_INFO = None
+
 with open('td_auth.txt', 'r') as f:
     acct_num, refresh_token = [l.strip('\n') for l in f.readlines()]
-    dc.init_auth_data(acct_num, refresh_token)
+    acct_info = dc.init_auth_data(acct_num, refresh_token)
+    if not acct_info == None:
+        # global GLOBAL_ACCT_INFO
+        GLOBAL_ACCT_INFO = acct_info
+        
 
 class DataCollectorInterface:
     def create_batch_market_order(symbols, amts):
