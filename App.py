@@ -85,10 +85,6 @@ class App(Frame):
         order_window = create_order_sender_popup(self)
 
     def switch_to_profile(self, prof):
-        if prof.daysToPull:
-            setText(self.file_input_pane.opt_sel.e1, prof.daysToPull)
-        else:
-            setText(self.file_input_pane.opt_sel.e1, "")
         self.crit_select.update_from_crit_list(prof.crits)
         if prof.ee_dict:
             self.entry_exit.set_manual(prof.ee_dict)

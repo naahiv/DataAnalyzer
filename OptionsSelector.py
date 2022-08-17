@@ -10,14 +10,8 @@ class OptionsSelector(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
 
-        self.l1 = Label(self, text='Days to Pull:')
-        self.l1.grid(row=0, column=0, sticky=W, padx=10)
-        self.e1 = Entry(self, width=2)
-        self.e1.insert(0, '1')
-        self.e1.grid(row=0, column=1, padx=5)
-
         self.l2 = Label(self, text='Date:')
-        self.l2.grid(row=1, column=0, sticky=W, padx=10)
+        self.l2.grid(row=0, column=0, sticky=W, padx=10)
 
         self.e_month = Entry(self, width=2)
         self.lS1 = Label(self, text='/')
@@ -25,11 +19,11 @@ class OptionsSelector(Frame):
         self.lS2 = Label(self, text='/')
         self.e_year = Entry(self, width=4)
 
-        self.e_month.grid(row=1, column=1)
-        self.lS1.grid(row=1, column=2)
-        self.e_day.grid(row=1, column=3)
-        self.lS2.grid(row=1, column=4)
-        self.e_year.grid(row=1, column=5)
+        self.e_month.grid(row=0, column=1)
+        self.lS1.grid(row=0, column=2)
+        self.e_day.grid(row=0, column=3)
+        self.lS2.grid(row=0, column=4)
+        self.e_year.grid(row=0, column=5)
 
     def get(self):
         # TODO: get rid of the zero from 'Days to Pull'
