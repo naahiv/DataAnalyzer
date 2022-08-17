@@ -3,6 +3,8 @@ from MeasurementTypes import *
 from Misc import VisualCriteria
 from OptionsSelector import *
 from tkinter.filedialog import askopenfile, asksaveasfile
+import re
+from datetime import datetime
 import os
 
 class FileInputPane(Frame):
@@ -37,6 +39,8 @@ class FileInputPane(Frame):
             self.input_loc = opened_file.name
             self.run_button.configure(state=NORMAL)
             self.filename_label.configure(text=os.path.basename(self.input_loc))
+            pred_date = FileInputPane.predict_date(self.input_loc)
+            self.opt_sel.set_date(*pred_date)
 
     def browse_for_save(self):
         f = asksaveasfile(mode='w', title='Save File', defaultextension='.csv')
@@ -49,6 +53,14 @@ class FileInputPane(Frame):
 
     def add_to_run(self, run_collection):
         self.run_analysis = run_collection
+    
+    def predict_date(filename):
+        try:
+            d_string = re.findall(r"\w{3}-\d{2}-\d{4}", filename)[0]
+            dt = datetime.strptime(d_string, '%b-%d-%Y')
+            return (str(dt.month), str(dt.day), str(dt.year))
+        except:
+            return ("", "", "")
 
 if __name__ == '__main__':
     from ctypes import windll

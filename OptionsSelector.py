@@ -2,6 +2,10 @@ from tkinter import *
 from MeasurementTypes import *
 from Misc import *
 
+def set_text(e, text):
+    e.delete(0, END)
+    e.insert(0, text)
+
 class OptionsSelector(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -30,6 +34,11 @@ class OptionsSelector(Frame):
     def get(self):
         infoList = [self.e1.get(), self.e_month.get(), self.e_day.get(), self.e_year.get()]
         return VisualOptions(infoList)
+
+    def set_date(self, mo, d, yr):
+        set_text(self.e_month, mo)
+        set_text(self.e_day, d)
+        set_text(self.e_year, yr)
 
 if __name__ == '__main__':
     from ctypes import windll
