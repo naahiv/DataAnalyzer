@@ -47,7 +47,8 @@ class DataCollectorInterface:
         path_out = options[2]
         opt_sel = options[1]
         
-        nDays = int(opt_sel.daysToPull)
+        nDays = DataCollectorInterface.get_n_days(criteria, en_ex)
+        print(nDays)
         day1 = opt_sel.dayOneDate
         
         print(f'time_list: {time_list}')
@@ -75,6 +76,15 @@ class DataCollectorInterface:
             if x == "":
                 return False
         return True
+
+    def get_n_days(crit_list, en_ex):
+        all_days = []
+        for crit in crit_list:
+            if crit.type == 0:
+                all_days += [int(crit.day1), int(crit.day2)]
+        if DataCollectorInterface.validate_ee(en_ex):
+            all_days += [int(en_ex[0]), int(en_ex[2])]
+        return max(all_days)
     
     def create_strategies(criteria_list):
         strategies = []

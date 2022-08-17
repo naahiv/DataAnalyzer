@@ -32,7 +32,8 @@ class OptionsSelector(Frame):
         self.e_year.grid(row=1, column=5)
 
     def get(self):
-        infoList = [self.e1.get(), self.e_month.get(), self.e_day.get(), self.e_year.get()]
+        # TODO: get rid of the zero from 'Days to Pull'
+        infoList = [0, self.e_month.get(), self.e_day.get(), self.e_year.get()]
         return VisualOptions(infoList)
 
     def set_date(self, mo, d, yr):
