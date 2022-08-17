@@ -66,10 +66,14 @@ class DataCollectorInterface:
 
         master.export_csv(path_out)
 
+        def finisher():
+            os.startfile(path_out)
+            return list(master.currentState['Symbol'])
+
         if DataCollectorInterface.validate_ee(en_ex):
-            return total_success_rate, lambda: os.startfile(path_out)
+            return total_success_rate, finisher
         else:
-            return None, lambda: os.startfile(path_out)
+            return None, finisher
 
     def validate_ee(en_ex):
         for x in en_ex:

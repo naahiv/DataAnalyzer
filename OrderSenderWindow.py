@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 from pandas import DateOffset
 from DataCollectorInterface import DataCollectorInterface
+from RepeatedEntry import *
 dci = DataCollectorInterface # alias
 import os
 
@@ -14,11 +15,11 @@ def format_symbol_list(string_list):
     return out
 
 class OrderSenderWindow(Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, init_symbols):
         Frame.__init__(self, parent)
 
         self.l1 = Label(self, text='BUY at: ')
-        self.l1.grid(row=0, column=0, padx=10, pady=5, sticky=W)
+        self.l1.grid(row=0, column=0, padx=10, pady=5, sticky=E)
 
         self.e1 = Entry(self, width=8)
         self.e1.grid(row=0, column=1, padx=5, pady=5)
@@ -38,8 +39,8 @@ class OrderSenderWindow(Frame):
         self.l4 = Label(self, text='Symbol List:')
         self.l4.grid(row=2, column=0, padx=5, pady=10)
 
-        self.e4 = Text(self, height=8, width=20, font='none 9')
-        self.e4.grid(row=3, column=0, columnspan=4, sticky=W, pady=10)
+        self.e4 = RepeatedEntry(self, init_symbols)
+        self.e4.grid(row=3, column=0, columnspan=4, sticky=W, pady=10, padx=5)
 
         self.b1 = Button(self, text='Send to TD', command=self.send_button_clicked)
         self.b1.grid(row=4, column=0, padx=5, pady=10)
@@ -87,7 +88,7 @@ class OrderSenderWindow(Frame):
         self.l_timer.after(200, lambda: self.start_timer(stop_time, callback))
 
     def send_button_clicked(self):
-        self.symbols = format_symbol_list(self.e4.get('1.0', 'end-1c'))
+        self.symbols = self.e4.get()
         self.per_amt = self.e3.get()
         start_time = self.e1.get()
         fmat = '%H:%M:%S'
@@ -105,11 +106,11 @@ class OrderSenderWindow(Frame):
             self.start_timer(cancel_time, second_callback)
         self.start_timer(start_time, nested_callback)
 
-def create_order_sender_popup(root):
+def create_order_sender_popup(root, lookouts):
     popup = Toplevel(root)
     popup.title('Order Sender')
     popup.geometry("900x1000")
-    senderWindow = OrderSenderWindow(popup)
+    senderWindow = OrderSenderWindow(popup, lookouts)
     senderWindow.grid(row=0, column=0)
     return senderWindow
 

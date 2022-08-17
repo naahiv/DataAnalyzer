@@ -57,6 +57,8 @@ class App(Frame):
         self.error_report_button = Button(self, text='Send Error Report', command=self.send_error_report)
         self.error_report_button.grid(row=5, column=0, sticky=W, pady=15, padx=5)
 
+        self.recent_lookouts = []
+
     def send_error_report(self):
         def on_send(sel_arr):
             json_config = self.get_meas_info().export_to_dict()
@@ -82,7 +84,7 @@ class App(Frame):
         return Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
 
     def open_order_window(self):
-        order_window = create_order_sender_popup(self)
+        order_window = create_order_sender_popup(self, self.recent_lookouts)
 
     def switch_to_profile(self, prof):
         self.crit_select.update_from_crit_list(prof.crits)
@@ -104,7 +106,7 @@ class App(Frame):
             self.progress.grid_forget()
             if not out_val == None:
                 messagebox.showinfo("Success Rate", f'The overall sucess rate of this strategy was {out_val}%')
-            perf_done()
+            self.recent_lookouts = perf_done()
 
 
         threading.Thread(target=run_threaded_process).start()
