@@ -117,7 +117,7 @@ class App(Frame):
     def check_for_auth_success(self):
         if not GLOBAL_ACCT_INFO == None:
             acct_name, trading_cash, liq_value = GLOBAL_ACCT_INFO
-            l1 = Label(self, text=f'Welcome, {acct_num}.')
+            l1 = Label(self, text=f'Welcome, {acct_name}.')
             l1.grid(row=6, column=0)
 
             l2 = Label(self, text=f'Trading Cash: {trading_cash}\tLiquid Value: {liq_value}')

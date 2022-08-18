@@ -13,7 +13,7 @@ class FileInputPane(Frame):
         self.input_locs = None
         self.out_name = None
 
-        self.file_button = Button(self, text='Choose File', command=self.open_file)
+        self.file_button = Button(self, text='Choose File(s)', command=self.open_file)
         self.file_button.grid(row=0, column=0, pady=10)
         
         self.opts_wrapper = None
