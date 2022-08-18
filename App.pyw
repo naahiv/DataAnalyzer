@@ -48,7 +48,7 @@ class App(Frame):
 
         self.progress = Progressbar(self, orient=HORIZONTAL, length=100,  mode='indeterminate')
 
-        self.order_button = Button(self, text='Open Order Sender', command=self.open_order_window)
+        self.order_button = Button(self, text='Open Order Sender', command=self.open_order_window, state=DISABLED)
         self.order_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
 
         self.logfile_button = Button(self, text='Open Log File', command=open_log_file)
@@ -56,6 +56,10 @@ class App(Frame):
 
         self.error_report_button = Button(self, text='Send Error Report', command=self.send_error_report)
         self.error_report_button.grid(row=5, column=0, sticky=W, pady=15, padx=5)
+
+        self.recent_lookouts = []
+
+        self.check_for_auth_success()
 
     def send_error_report(self):
         def on_send(sel_arr):
@@ -68,12 +72,12 @@ class App(Frame):
             time.sleep(250.0 / 1000.0)
             report.send_report()
 
-            messagebox.showinfo('Success!', f'The error was successfully reported to the developer, who will likely get back to you soon!')
+            messagebox.showinfo('Success!', f'The error was successfully reported to the developer, who will get back to you soon!')
 
         self.error_popup = create_error_report_popup(self, on_send)
 
     def get_meas_info(self):
-        daysToPull = self.file_input_pane.opt_sel.e1.get()
+        daysToPull = 0 # deprecated
         crit_list = self.crit_select.get()
         ee = self.entry_exit.get()
         ee_dict = None
@@ -82,7 +86,7 @@ class App(Frame):
         return Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
 
     def open_order_window(self):
-        order_window = create_order_sender_popup(self)
+        order_window = create_order_sender_popup(self, self.recent_lookouts)
 
     def switch_to_profile(self, prof):
         self.crit_select.update_from_crit_list(prof.crits)
@@ -104,11 +108,23 @@ class App(Frame):
             self.progress.grid_forget()
             if not out_val == None:
                 messagebox.showinfo("Success Rate", f'The overall sucess rate of this strategy was {out_val}%')
-            perf_done()
+            self.recent_lookouts = perf_done()
 
 
         threading.Thread(target=run_threaded_process).start()
         print(criteria, options)
+
+    def check_for_auth_success(self):
+        if not GLOBAL_ACCT_INFO == None:
+            acct_name, trading_cash, liq_value = GLOBAL_ACCT_INFO
+            l1 = Label(self, text=f'Welcome, {acct_name}.')
+            l1.grid(row=6, column=0)
+
+            l2 = Label(self, text=f'Trading Cash: {trading_cash}\tLiquid Value: {liq_value}')
+            l2.grid(row=7, column=0)
+
+            self.order_button.configure(state=NORMAL)
+
 
 if __name__ == '__main__':
     from ctypes import windll
