@@ -15,7 +15,7 @@ def format_symbol_list(string_list):
     return out
 
 class OrderSenderWindow(Frame):
-    def __init__(self, parent, init_symbols):
+    def __init__(self, parent, init_symbols=[]):
         Frame.__init__(self, parent)
 
         self.l1 = Label(self, text='BUY at: ')
@@ -36,26 +36,54 @@ class OrderSenderWindow(Frame):
         self.e3 = Entry(self, width=8)
         self.e3.grid(row=1, column=1, padx=5, pady=5)
 
+        self.tp_var = IntVar()
+        self.tp_check = Checkbutton(self, text='Take Profit (%)', variable=self.tp_var, onvalue=1, offvalue=0, command=self.toggle_tp_e)
+        self.tp_check.grid(row=2, column=0)
+
+        self.tp_e = Entry(self, width=4)
+        self.tp_e.grid(row=2, column=1, padx=5)
+        self.tp_e.grid_remove() # maybe not
+
+        self.sl_var = IntVar()
+        self.sl_check = Checkbutton(self, text='Stop Loss (%)', variable=self.sl_var, onvalue=1, offvalue=0, command=self.toggle_sl_e)
+        self.sl_check.grid(row=3, column=0)
+
+        self.sl_e = Entry(self, width=4)
+        self.sl_e.grid(row=3, column=1, padx=5)
+        self.sl_e.grid_remove() # maybe not
+
         self.l4 = Label(self, text='Symbol List:')
-        self.l4.grid(row=2, column=0, padx=5, pady=10)
+        self.l4.grid(row=4, column=0, padx=5, pady=10)
 
         self.e4 = RepeatedEntry(self, init_symbols)
-        self.e4.grid(row=3, column=0, columnspan=4, sticky=W, pady=10, padx=5)
+        self.e4.grid(row=5, column=0, columnspan=4, sticky=W, pady=10, padx=5)
 
         self.b1 = Button(self, text='Send to TD', command=self.send_button_clicked)
-        self.b1.grid(row=4, column=0, padx=5, pady=10)
+        self.b1.grid(row=6, column=0, padx=5, pady=10)
 
         self.l_timer = Label(self, font=('arial', 40))
-        self.l_timer.grid(row=5, column=0, padx=5, pady=20)
+        self.l_timer.grid(row=7, column=0, padx=5, pady=20)
 
         self.l6 = Label(self)
-        self.l6.grid(row=6, column=0, padx=5, pady=10)
+        self.l6.grid(row=8, column=0, padx=5, pady=10)
 
         self.l7 = Label(self)
-        self.l7.grid(row=7, column=0, padx=5, pady=10)
+        self.l7.grid(row=9, column=0, padx=5, pady=10)
 
         self.l8 = Label(self)
-        self.l8.grid(row=8, column=0, padx=5, pady=10)
+        self.l8.grid(row=10, column=0, padx=5, pady=10)
+
+    def toggle_tp_e(self):
+        if self.tp_var.get() == 0:
+            self.tp_e.grid_remove()
+        else:
+            self.tp_e.grid()
+
+    def toggle_sl_e(self):
+        if self.sl_var.get() == 0:
+            self.sl_e.grid_remove()
+        else:
+            self.sl_e.grid()
 
 
     def setup_event_labels(self, times_arr):
@@ -64,8 +92,13 @@ class OrderSenderWindow(Frame):
 
     def stage_one(self):
         # in this step, we send market BUYs for each of the symbols
+        tp_perc, sl_perc = None, None
+        if self.tp_var.get() == 1:
+            tp_perc = float(self.tp_e.get())
+        if self.sl_var.get() == 1:
+            sl_perc = float(self.sl_e.get())
         self.l6.config(text='SUBMITTED')
-        self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt))
+        self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt), tp_perc, sl_perc)
 
     def stage_two(self):
         # in this step, we cancel all unfilled orders

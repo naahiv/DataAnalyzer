@@ -7,9 +7,9 @@ with open('td_auth.txt', 'r') as f:
     dc.init_auth_data(acct_num, refresh_token)
 
 class DataCollectorInterface:
-    def create_batch_market_order(symbols, amts):
+    def create_batch_market_order(symbols, amts, tp_perc=None, sl_perc=None):
         sender = dc.OrderSender.create_order_sender()
-        return sender.create_batch_market_order(symbols, amts)
+        return sender.create_batch_market_order(symbols, amts, tp_perc, sl_perc)
 
     def get_order_status(order_id):
         sender = dc.OrderSender.create_order_sender()
