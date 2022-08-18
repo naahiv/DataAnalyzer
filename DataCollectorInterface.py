@@ -14,9 +14,13 @@ with open('td_auth.txt', 'r') as f:
         
 
 class DataCollectorInterface:
-    def create_batch_market_order(symbols, amts, tp_perc=None, sl_perc=None):
+    def create_batch_market_order(symbols, amts, tp_perc=None, sl_perc=None, ask_list=None):
         sender = dc.OrderSender.create_order_sender()
-        return sender.create_batch_market_order(symbols, amts, tp_perc, sl_perc)
+        return sender.create_batch_market_order(symbols, amts, tp_perc, sl_perc, ask_list)
+
+    def td_ask_validation(symbols):
+        sender = dc.OrderSender.create_order_sender()
+        return sender.td_ask_validation(symbols)
 
     def get_order_status(order_id):
         sender = dc.OrderSender.create_order_sender()

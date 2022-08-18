@@ -4,6 +4,7 @@ from datetime import datetime
 from pandas import DateOffset
 from DataCollectorInterface import DataCollectorInterface
 from RepeatedEntry import *
+from tkinter import messagebox
 dci = DataCollectorInterface # alias
 import os
 
@@ -30,7 +31,7 @@ class OrderSenderWindow(Frame):
         self.e2 = Entry(self, width=8)
         self.e2.grid(row=0, column=3, padx=5, pady=5)
 
-        self.l3 = Label(self, text='Price per stock (approx. $): ')
+        self.l3 = Label(self, text='Amount per stock (approx. $): ')
         self.l3.grid(row=1, column=0, padx=10, pady=5, sticky=W)
 
         self.e3 = Entry(self, width=8)
@@ -73,6 +74,8 @@ class OrderSenderWindow(Frame):
         self.l8 = Label(self)
         self.l8.grid(row=10, column=0, padx=5, pady=10)
 
+        self.ask_list = None
+
     def toggle_tp_e(self):
         if self.tp_var.get() == 0:
             self.tp_e.grid_remove()
@@ -98,7 +101,8 @@ class OrderSenderWindow(Frame):
         if self.sl_var.get() == 1:
             sl_perc = float(self.sl_e.get())
         self.l6.config(text='SUBMITTED')
-        self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt), tp_perc, sl_perc)
+        # assume ask_list has been generated
+        self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt), tp_perc, sl_perc, self.ask_list)
 
     def stage_two(self):
         # in this step, we cancel all unfilled orders
@@ -121,6 +125,13 @@ class OrderSenderWindow(Frame):
         self.l_timer.after(200, lambda: self.start_timer(stop_time, callback))
 
     def send_button_clicked(self):
+        error_message = self.validate_order_params()
+        if error_message == None:
+            self.initiate_order_sequence()
+        else:
+            messagebox.showerror('Order Configuration Error', error_message)
+
+    def initiate_order_sequence(self):
         self.symbols = self.e4.get()
         self.per_amt = self.e3.get()
         start_time = self.e1.get()
@@ -138,6 +149,30 @@ class OrderSenderWindow(Frame):
                 self.start_timer(end_time, self.stage_three)
             self.start_timer(cancel_time, second_callback)
         self.start_timer(start_time, nested_callback)
+
+    def validate_order_params(self):
+        try:
+            datetime.strptime(self.e1.get(), '%H:%M:%S')
+            datetime.strptime(self.e1.get(), '%H:%M:%S')
+            try:
+                float(self.e3.get())
+                try:
+                    if self.tp_var.get() == 1:
+                        float(self.tp_e.get())
+                    if self.sl_var.get() == 1:
+                        float(self.sl_e.get())
+
+                    error_message, ask_list = dci.td_ask_validation(self.e4.get())
+                    self.ask_list = ask_list
+                    return error_message
+                except:
+                    return 'If Take Profit or Stop Loss boxes are checked, a valid percentage must be provided.'
+            except:
+                return 'A proper amount per stock must be provided.'
+
+        except:
+            print(e)
+            return 'Times must be given in full format, e.g.: 09:35:22.'
 
 def create_order_sender_popup(root, lookouts):
     popup = Toplevel(root)
