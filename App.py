@@ -72,12 +72,12 @@ class App(Frame):
             time.sleep(250.0 / 1000.0)
             report.send_report()
 
-            messagebox.showinfo('Success!', f'The error was successfully reported to the developer, who will likely get back to you soon!')
+            messagebox.showinfo('Success!', f'The error was successfully reported to the developer, who will get back to you soon!')
 
         self.error_popup = create_error_report_popup(self, on_send)
 
     def get_meas_info(self):
-        daysToPull = self.file_input_pane.opt_sel.e1.get()
+        daysToPull = 0 # deprecated
         crit_list = self.crit_select.get()
         ee = self.entry_exit.get()
         ee_dict = None
@@ -116,8 +116,8 @@ class App(Frame):
 
     def check_for_auth_success(self):
         if not GLOBAL_ACCT_INFO == None:
-            acct_num, trading_cash, liq_value = GLOBAL_ACCT_INFO
-            l1 = Label(self, text=f'Welcome, Account #{acct_num}')
+            acct_name, trading_cash, liq_value = GLOBAL_ACCT_INFO
+            l1 = Label(self, text=f'Welcome, {acct_num}.')
             l1.grid(row=6, column=0)
 
             l2 = Label(self, text=f'Trading Cash: {trading_cash}\tLiquid Value: {liq_value}')

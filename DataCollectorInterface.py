@@ -31,7 +31,6 @@ class DataCollectorInterface:
         sender.create_batch_closes(order_ids)
 
     def run_analysis(options, criteria, en_ex):
-
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
 
         if DataCollectorInterface.validate_ee(en_ex):
@@ -50,16 +49,19 @@ class DataCollectorInterface:
 
         time_list = DataCollectorInterface.time_order(unordered_times)
         
-        path_in = options[0]
+        in_filenames = options[0]
         path_out = options[2]
-        opt_sel = options[1]
+        options_wrapper = options[1]
         
         nDays = DataCollectorInterface.get_n_days(criteria, en_ex)
-        print(nDays)
-        day1 = opt_sel.dayOneDate
+        print(f'days to pull: {nDays}')
         
         print(f'time_list: {time_list}')
-        dataFilter = dc.DataFilter(path_in, day1, [time_list for i in range(nDays)])    
+
+        dataFilter = dc.DataFilter(in_filenames[0], options_wrapper[0].dayOneDate, [time_list for i in range(nDays)])    
+        for (filename, opts) in zip(in_filenames[1:], options_wrapper[1:]):
+            dataFilter = dataFilter.mergeWith(dc.DataFilter(filename, opts.dayOneDate, [time_list for i in range(nDays)]))
+
         if not time_list == []:
             master = dataFilter.generateMaster()
         else:
@@ -89,9 +91,11 @@ class DataCollectorInterface:
         return True
 
     def get_n_days(crit_list, en_ex):
-        all_days = []
+        all_days = [0]
         for crit in crit_list:
-            if crit.type == 0:
+            if type(crit) == list:
+                all_days.append(DataCollectorInterface.get_n_days(crit, ['']))
+            elif crit.type == 0:
                 all_days += [int(crit.day1), int(crit.day2)]
         if DataCollectorInterface.validate_ee(en_ex):
             all_days += [int(en_ex[0]), int(en_ex[2])]
