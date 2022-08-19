@@ -59,6 +59,8 @@ class App(Frame):
 
         self.recent_lookouts = []
 
+        self.current_order_data = {'t1': '', 't2': '', 'amt': ''}
+
         self.check_for_auth_success()
 
     def send_error_report(self):
@@ -83,10 +85,31 @@ class App(Frame):
         ee_dict = None
         if DataCollectorInterface.validate_ee(ee):
             ee_dict = {'day1': ee[0], 'time1':ee[1], 'day2': ee[2], 'time2': ee[3]}
-        return Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
+        prof = Profile(None, {'name': None, 'dtp': daysToPull,'crits': crit_list, 'ee': ee_dict})
+        
+        prof.order_data = self.get_current_order_data()
+        return prof
+
+    def get_current_order_data(self):
+        try:
+            return self.order_window.get()
+        except:
+            return self.current_order_data
+    
+    def update_order_data(self, order_data):
+        if not order_data == None:
+            self.current_order_data = order_data
+        else:
+            self.current_order_data = {'t1': '', 't2': '', 'amt': ''}
+        try:
+            self.order_window.update(self.current_order_data)
+        except:
+            pass
 
     def open_order_window(self):
-        order_window = create_order_sender_popup(self, self.recent_lookouts)
+        def on_closing(order_window):
+            self.current_order_data = order_window.get()
+        self.order_window = create_order_sender_popup(self, self.recent_lookouts, self.current_order_data, on_closing)
 
     def switch_to_profile(self, prof):
         self.crit_select.update_from_crit_list(prof.crits)
@@ -94,6 +117,7 @@ class App(Frame):
             self.entry_exit.set_manual(prof.ee_dict)
         else:
             self.entry_exit.set_manual({'day1': '', 'time1': '', 'day2': '', 'time2': ''})
+        self.update_order_data(prof.order_data)
 
     def run_collection(self):
         criteria = self.crit_select.get()

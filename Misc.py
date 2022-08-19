@@ -128,6 +128,7 @@ class VisualOptions:
 
 class Profile:
     def __init__(self, prof_dict, direct_init=None):
+        self.order_data = None
         if direct_init:
             self.name = direct_init['name']
             self.crits = direct_init['crits']
@@ -145,6 +146,8 @@ class Profile:
             self.ee_dict = None
             if 'entry_exit' in prof_dict:
                 self.ee_dict = prof_dict['entry_exit']
+            if 'order_data' in prof_dict:
+                self.order_data = prof_dict['order_data']
 
     def export_to_dict(self):
         prof_dict = {}
@@ -158,6 +161,8 @@ class Profile:
                 prof_dict['criteria'].append([inner_crit.export_to_dict() for inner_crit in crit])
             else:
                 prof_dict['criteria'].append(crit.export_to_dict())
+        if not self.order_data == None:
+            prof_dict['order_data'] = self.order_data
         return prof_dict
 
 fp = op.join(home, 'profiles.json')

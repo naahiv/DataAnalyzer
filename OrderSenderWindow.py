@@ -171,15 +171,49 @@ class OrderSenderWindow(Frame):
                 return 'A proper amount per stock must be provided.'
 
         except:
-            print(e)
             return 'Times must be given in full format, e.g.: 09:35:22.'
 
-def create_order_sender_popup(root, lookouts):
+    def get(self):
+        d = {'t1': self.e1.get(), 't2': self.e2.get(), 'amt': self.e3.get()}
+        if self.tp_var.get() == 1:
+            d['tp'] = self.tp_e.get()
+        if self.sl_var.get() == 1:
+            d['sl'] = self.sl_e.get()
+        return d
+
+    def update(self, data):
+        set_text(self.e1, data['t1'])
+        set_text(self.e2, data['t2'])
+        set_text(self.e3, data['amt'])
+        if 'tp' in data:
+            self.tp_var.set(1)
+            self.toggle_tp_e()
+            set_text(self.tp_e, data['tp'])
+        else:
+            self.tp_var.set(0)
+            set_text(self.tp_e, 0)
+            self.toggle_tp_e()
+
+        if 'sl' in data:
+            self.sl_var.set(1)
+            self.toggle_sl_e()
+            set_text(self.sl_e, data['sl'])
+        else:
+            self.sl_var.set(0)
+            set_text(self.sl_e, 0)
+            self.toggle_sl_e()
+
+def create_order_sender_popup(root, lookouts, init_data, on_closing):
     popup = Toplevel(root)
     popup.title('Order Sender')
     popup.geometry("900x1000")
     senderWindow = OrderSenderWindow(popup, lookouts)
     senderWindow.grid(row=0, column=0)
+    senderWindow.update(init_data)
+    def closer(sen_win=senderWindow):
+        on_closing(sen_win)
+        popup.destroy()
+    popup.protocol("WM_DELETE_WINDOW", closer)
     return senderWindow
 
 if __name__ == '__main__':
