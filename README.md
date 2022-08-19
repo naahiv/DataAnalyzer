@@ -7,7 +7,6 @@ To install a version, simply:
 - Choose the latest version's installer file. Download it and run the installer (named `DataAnalyzerInstallerXXX.exe`), which will install to your `Program Files (x86)` directory by default
   - *Note: it is highly recommended to keep this as the installation directory. If you do not, see the next section to obtain your `td_auth.txt` file.*
 - If this is first time installing the software (i.e. you are not updating):
-  - Download the `profiles.json` file from the releases page and save to your home directory (e.g. `C:\Users\myusername\`). You will not have to do this when updating
   - See the next section for setting up your authentication file
 
 ### Setting up your TD Authentication File
