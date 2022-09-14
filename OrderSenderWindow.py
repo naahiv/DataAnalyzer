@@ -106,6 +106,14 @@ class OrderSenderWindow(Frame):
 
     def stage_two(self):
         # in this step, we cancel all unfilled orders
+        """
+        In this edition of the software, i.e. anything version 3 or before, we will not 
+        do the cancellation process. For some reason, the wrong orders apparently get
+        canceled. In the next edition, we will implement a much more detailed TDOrder class,
+        which will correctly obtain and separate orders and their legs.
+        """
+        pass
+        # the following does not get executed
         self.l7.config(text='SUBMITTED')
         for order_id in self.order_id_list:
             if not dci.get_order_status(order_id) == 'FILLED':
