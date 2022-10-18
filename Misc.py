@@ -27,7 +27,11 @@ class CustomIO(io.StringIO):
     def check_for_clear(self):
         if op.getsize(log_fp) >= 1000*LOG_KB_LIMIT:
             with open(log_fp, 'wb') as logfile:
-                logfile.write(logfile.read()[1000*LOG_KB_PUSHBACK:])
+                # TEMPORARY PATCH
+                try:
+                    logfile.write(logfile.read()[1000*LOG_KB_PUSHBACK:])
+                except:
+                    print('something weird...!')
 
     def write(self, s):
         io.StringIO.write(self, s)
