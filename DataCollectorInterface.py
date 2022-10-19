@@ -18,6 +18,10 @@ class DataCollectorInterface:
         sender = dc.OrderSender.create_order_sender()
         return sender.create_batch_market_order(symbols, amts, tp_perc, sl_perc, ask_list)
 
+    def create_batch_limit_order(symbols, amts, limit_price, tp_perc=None, sl_perc=None, ask_list=None):
+        sender = dc.OrderSender.create_order_sender()
+        return sender.create_batch_limit_order(symbols, amts, limit_price, tp_perc, sl_perc, ask_list)
+
     def td_ask_validation(symbols):
         sender = dc.OrderSender.create_order_sender()
         return sender.td_ask_validation(symbols)

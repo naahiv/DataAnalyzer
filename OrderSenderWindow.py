@@ -124,14 +124,19 @@ class OrderSenderWindow(Frame):
 
     def stage_one(self):
         # in this step, we send market BUYs for each of the symbols
-        tp_perc, sl_perc = None, None
+        limit_price, tp_perc, sl_perc = None, None, None
         if self.tp_var.get() == 1:
             tp_perc = float(self.tp_e.get())
         if self.sl_var.get() == 1:
             sl_perc = float(self.sl_e.get())
+        if self.lc_var.get() == 1:
+            lc_perc = float(self.lc_e.get())
         self.l6.config(text='SUBMITTED')
         # assume ask_list has been generated
-        self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt), tp_perc, sl_perc, self.ask_list)
+        if lc_perc:
+            self.order_id_list = dci.create_batch_limit_order(self.symbols, lc_perc, float(self.per_amt), tp_perc, sl_perc, self.ask_list)
+        else:
+            self.order_id_list = dci.create_batch_market_order(self.symbols, float(self.per_amt), tp_perc, sl_perc, self.ask_list)
 
     def stage_two(self):
         # in this step, we cancel all unfilled orders
