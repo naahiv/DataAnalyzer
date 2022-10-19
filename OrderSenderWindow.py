@@ -53,26 +53,43 @@ class OrderSenderWindow(Frame):
         self.sl_e.grid(row=3, column=1, padx=5)
         self.sl_e.grid_remove() # maybe not
 
+
+        self.lf_var = IntVar()
+        self.lf_check = Checkbutton(self, text='Limit Floor (%)', variable=self.lf_var, onvalue=1, offvalue=0, command=self.toggle_lf_e)
+        self.lf_check.grid(row=4, column=0)
+
+        self.lf_e = Entry(self, width=4)
+        self.lf_e.grid(row=4, column=1, padx=5)
+        self.lf_e.grid_remove() # maybe not
+
+        self.lc_var = IntVar()
+        self.lc_check = Checkbutton(self, text='Limit Cieling (%)', variable=self.lc_var, onvalue=1, offvalue=0, command=self.toggle_lc_e)
+        self.lc_check.grid(row=5, column=0)
+
+        self.lc_e = Entry(self, width=4)
+        self.lc_e.grid(row=5, column=1, padx=5)
+        self.lc_e.grid_remove() # maybe not
+
         self.l4 = Label(self, text='Symbol List:')
-        self.l4.grid(row=4, column=0, padx=5, pady=10)
+        self.l4.grid(row=6, column=0, padx=5, pady=10)
 
         self.e4 = RepeatedEntry(self, init_symbols)
-        self.e4.grid(row=5, column=0, columnspan=4, sticky=W, pady=10, padx=5)
+        self.e4.grid(row=7, column=0, columnspan=4, sticky=W, pady=10, padx=5)
 
         self.b1 = Button(self, text='Send to TD', command=self.send_button_clicked)
-        self.b1.grid(row=6, column=0, padx=5, pady=10)
+        self.b1.grid(row=8, column=0, padx=5, pady=10)
 
         self.l_timer = Label(self, font=('arial', 40))
-        self.l_timer.grid(row=7, column=0, padx=5, pady=20)
+        self.l_timer.grid(row=8, column=0, padx=5, pady=20)
 
         self.l6 = Label(self)
-        self.l6.grid(row=8, column=0, padx=5, pady=10)
+        self.l6.grid(row=10, column=0, padx=5, pady=10)
 
         self.l7 = Label(self)
-        self.l7.grid(row=9, column=0, padx=5, pady=10)
+        self.l7.grid(row=11, column=0, padx=5, pady=10)
 
         self.l8 = Label(self)
-        self.l8.grid(row=10, column=0, padx=5, pady=10)
+        self.l8.grid(row=12, column=0, padx=5, pady=10)
 
         self.ask_list = None
 
@@ -87,6 +104,18 @@ class OrderSenderWindow(Frame):
             self.sl_e.grid_remove()
         else:
             self.sl_e.grid()
+
+    def toggle_lf_e(self):
+        if self.lf_var.get() == 0:
+            self.lf_e.grid_remove()
+        else:
+            self.lf_e.grid()
+
+    def toggle_lc_e(self):
+        if self.lc_var.get() == 0:
+            self.lc_e.grid_remove()
+        else:
+            self.lc_e.grid()
 
 
     def setup_event_labels(self, times_arr):
