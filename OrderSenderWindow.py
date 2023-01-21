@@ -63,7 +63,7 @@ class OrderSenderWindow(Frame):
         self.lf_e.grid_remove() # maybe not
 
         self.lc_var = IntVar()
-        self.lc_check = Checkbutton(self, text='Limit Cieling (%)', variable=self.lc_var, onvalue=1, offvalue=0, command=self.toggle_lc_e)
+        self.lc_check = Checkbutton(self, text='Limit Ceiling (%)', variable=self.lc_var, onvalue=1, offvalue=0, command=self.toggle_lc_e)
         self.lc_check.grid(row=5, column=0)
 
         self.lc_e = Entry(self, width=4)
