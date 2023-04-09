@@ -124,7 +124,7 @@ class OrderSenderWindow(Frame):
 
     def stage_one(self):
         # in this step, we send market BUYs for each of the symbols
-        limit_price, tp_perc, sl_perc = None, None, None
+        limit_price, tp_perc, sl_perc, lc_perc = None, None, None, None
         if self.tp_var.get() == 1:
             tp_perc = float(self.tp_e.get())
         if self.sl_var.get() == 1:
