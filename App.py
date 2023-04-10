@@ -19,6 +19,7 @@ from EntryExitTester import *
 from MeasurementTypes import setText
 from ErrorReport import *
 from OrderSenderWindow import *
+from CompletedMessage import *
 import threading
 from tkinter import messagebox
 
@@ -127,9 +128,21 @@ class App(Frame):
         def run_threaded_process():
             self.progress.grid(row=2, column=0)
             self.progress.start()
+            """ In preparation for CompletedMessage:
+            out_val, perf_done, open_summary = DataCollectorInterface.run_analysis(options, criteria, entry_exit)
+            """
             out_val, perf_done = DataCollectorInterface.run_analysis(options, criteria, entry_exit)
             self.progress.stop()
             self.progress.grid_forget()
+            """ In preparation for CompletedMessage:
+            def mod_perf_done():
+                self.recent_lookouts = perf_done()
+            completed_popup = create_completed_popup(self, {
+                'success_rate': out_val,
+                'open_summary': XYZ,
+                'open_results': mod_perf_done
+            })
+            """
             if not out_val == None:
                 messagebox.showinfo("Success Rate", f'The overall sucess rate of this strategy was {out_val}%')
             self.recent_lookouts = perf_done()
