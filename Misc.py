@@ -63,6 +63,36 @@ begin_output_log()
 if sys.argv[0] == 'App.py':
     revert_to_print_log()
 
+
+class AnalysisSummary:
+    """
+    A class for organizing data for formatting it into an analysis summary csv file for the user. This is interacted with by clicking "Open Summary" or "Open Both" upon running completion.
+    """
+    def __init__(self, **kwargs):
+        self.sum_block = kwargs['sum_block'] # i.e. ("eric's new profile", -0.37, 2.48)
+        self.anal_block = kwargs['anal_block'] # i.e. [1, '9:31', 1, '9:39']
+        self.crit_block = kwargs['crit_block'] # i.e. [visual_crit_1, visual_crit_2, ...]
+        self.data_block = kwargs['data_block'] # i.e. [250, ('7/7/2021', 'decliners_jul_7.xslx), (...), ...]
+
+    def print_summary(self):
+        print(self.sum_block)
+        print(self.anal_block)
+        print(self.crit_block)
+        print(self.data_block)
+
+    def setup_summary_array(self):
+        block1 = [['Profile', 'Avg. Success Rate', 'Standard Deviation'],
+                  self.sum_block]
+        block2 = [['Analysis:', '', ''],
+                  [f'Buy on Day {self.crit_block[0]}', f'at {self.crit_block[1]}', f'Sell on Day {self.crit_block[2]}', f'at {self.crit_block[3]}']]
+        crit_arr, max_len = AnalysisSummary.arrayize(self.crit_block)
+        block3 = [['Critera Selection']] + crit_arr
+
+        block3 = [['Test Data', f'{self.data_block[0]} datapoints'],
+                  ['Date', 'Filename']] + self.data_block
+        
+
+
 class VisualCriteria:
     """
     An interim class for holding & organizing information before being passed to 

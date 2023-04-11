@@ -2,6 +2,8 @@ import time
 import td_data_collector as dc
 import os
 
+from Misc import AnalysisSummary
+
 global GLOBAL_ACCT_INFO
 GLOBAL_ACCT_INFO = None
 
@@ -38,7 +40,7 @@ class DataCollectorInterface:
         sender = dc.OrderSender.create_order_sender()
         sender.create_batch_closes(order_ids)
 
-    def run_analysis(options, criteria, en_ex):
+    def run_analysis(options, criteria, en_ex, **kwargs):
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
 
         if DataCollectorInterface.validate_ee(en_ex):
@@ -83,14 +85,36 @@ class DataCollectorInterface:
 
         master.export_csv(path_out)
 
+        def open_summary(total_success_rate=total_success_rate, master=master, en_ex=en_ex, in_filenames=in_filenames, options_wrapper=options_wrapper, criteria=criteria, kwargs=kwargs):
+            prof_name = ''
+            if 'prof_name' in kwargs:
+                prof_name = kwargs['prof_name']
+            
+            anal_block = None
+            if DataCollectorInterface.validate_ee(en_ex):
+                standard_dev = master.get_column('Percentage Win').std()
+            else:
+                total_success_rate = ""
+                standard_dev = ""
+        
+            data_count = master.currentStockCount()
+            dates_fnames = [[opts.dayOneDate, filename] for (filename, opts) in zip(in_filenames, options_wrapper)]
+
+
+            anal_summary = AnalysisSummary(sum_block=[prof_name, total_success_rate, standard_dev],
+                                          anal_block=en_ex,
+                                          crit_block=criteria,
+                                          data_block=[data_count] + dates_fnames)
+            anal_summary.print_summary() # remove later
+
         def finisher():
             os.startfile(path_out)
             return list(master.currentState['Symbol'])
 
         if DataCollectorInterface.validate_ee(en_ex):
-            return total_success_rate, finisher
+            return total_success_rate, finisher, open_summary
         else:
-            return None, finisher
+            return None, finisher, open_summary
 
     def validate_ee(en_ex):
         for x in en_ex:

@@ -17,9 +17,13 @@ class CompletedPopup(Frame):
             data['open_summary']()
             cc()
 
+        if data['success_rate']:
+            self.l1 = Label(self, text=f"Your strategy had a success rate of {data['success_rate']}.", font='none 13')
+            self.l1.grid(row=0, column=0, columnspan=4, sticky=W, pady=10)
+        else:
+            self.l1 = Label(self, text=f"Your strategy has finished running.", font='none 13')
+            self.l1.grid(row=0, column=0, columnspan=4, sticky=W, pady=10)
 
-        self.l1 = Label(self, text=f"Your strategy had a success rate of {data['success_rate']}.", font='none 13')
-        self.l1.grid(row=0, column=0, columnspan=4, sticky=W, pady=10)
 
         self.b1 = Button(self, text='Open Summary', command=open_summary)
         self.b1.grid(row=1, column=1, pady=30, padx=15)
@@ -35,7 +39,7 @@ class CompletedPopup(Frame):
 
         
 def create_completed_popup(root, data):
-    popup = TopLevel(root)
+    popup = Toplevel(root)
     popup.title('Analysis Completed')
     popup.geometry('800x400')
     
