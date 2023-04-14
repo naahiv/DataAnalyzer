@@ -8,6 +8,8 @@ log_fp = op.join(home, 'da_output.log')
 LOG_KB_LIMIT = 512
 LOG_KB_PUSHBACK = 128
 
+import pandas as pd
+
 def line_filter(s, ec='\n'):
     if not s == ec:
         return '\n'.join(filter(''.__ne__, s.split(ec))).replace('#', '')
@@ -63,6 +65,7 @@ begin_output_log()
 if sys.argv[0] == 'App.py':
     revert_to_print_log()
 
+import pdb
 
 class AnalysisSummary:
     """
@@ -74,22 +77,38 @@ class AnalysisSummary:
         self.crit_block = kwargs['crit_block'] # i.e. [visual_crit_1, visual_crit_2, ...]
         self.data_block = kwargs['data_block'] # i.e. [250, ('7/7/2021', 'decliners_jul_7.xslx), (...), ...]
 
+        # self.out_path = kwargs['out_path']
+        self.out_path = 'C:\\Users\\vihaa\\Downloads\\Misc\\test_summary.csv'
+
     def print_summary(self):
-        print(self.sum_block)
-        print(self.anal_block)
-        print(self.crit_block)
-        print(self.data_block)
+        df = self.setup_summary_array()
+        df.to_csv(self.out_path, index=False)
+        os.startfile(self.out_path)
 
     def setup_summary_array(self):
         block1 = [['Profile', 'Avg. Success Rate', 'Standard Deviation'],
                   self.sum_block]
-        block2 = [['Analysis:', '', ''],
-                  [f'Buy on Day {self.crit_block[0]}', f'at {self.crit_block[1]}', f'Sell on Day {self.crit_block[2]}', f'at {self.crit_block[3]}']]
-        crit_arr, max_len = AnalysisSummary.arrayize(self.crit_block)
+        block2 = [['Analysis:'],
+                  [f'Buy on Day {self.anal_block[0]}', f'at {self.anal_block[1]}', f'Sell on Day {self.anal_block[2]}', f'at {self.anal_block[3]}']]
+        crit_arr = AnalysisSummary.arrayize(self.crit_block)
         block3 = [['Critera Selection']] + crit_arr
 
-        block3 = [['Test Data', f'{self.data_block[0]} datapoints'],
-                  ['Date', 'Filename']] + self.data_block
+        block4 = [['Test Data', f'{self.data_block[0]} datapoints'],
+                  ['Date', 'Filename']] + self.data_block[1:]
+        emp = [[],[]]
+        # pdb.set_trace()
+        return pd.DataFrame(block1+emp+block2+emp+block3+emp+block4)
+
+    def arrayize(crits):
+        out = []
+        for crit in crits:
+            if crit.type == 0:
+                out.append(['Price', f'on Day {crit.day1}', f'at {crit.time1}', crit.comp, f'on Day {crit.day2}', f'at {crit.time2}', f'by {crit.by_perc}'])
+            elif crit.type == 1:
+                out.append(['Input Value', f'{crit.input_field}', crit.comp, f'on Day {crit.value}'])
+            else: # or clause...?
+                out.append(['OR Clause'])
+        return out
         
 
 
