@@ -73,9 +73,15 @@ class DataCollectorInterface:
             dataFilter = dataFilter.mergeWith(dc.DataFilter(filename, opts.dayOneDate, [time_list for i in range(nDays)]))
 
         if not time_list == []:
-            master = dataFilter.generateMaster()
+            print(kwargs['time_callback'])
+            master = dataFilter.generateMaster(kwargs['time_callback'], kwargs['thread'])
         else:
             master = dataFilter
+        
+        if kwargs['thread'].is_stopped():
+            print('thread stopped DCI')
+            return None, None, None
+
         for strat in boolean_strats:
             # master.show()
             master.filterFor(strat)
@@ -85,7 +91,7 @@ class DataCollectorInterface:
 
         master.export_csv(path_out)
 
-        def open_summary(total_success_rate=total_success_rate, master=master, en_ex=en_ex, in_filenames=in_filenames, options_wrapper=options_wrapper, criteria=criteria, kwargs=kwargs):
+        def open_summary(total_success_rate=total_success_rate, master=master, en_ex=en_ex, in_filenames=in_filenames, options_wrapper=options_wrapper, criteria=criteria, path_out=path_out, kwargs=kwargs):
             prof_name = ''
             if 'prof_name' in kwargs:
                 prof_name = kwargs['prof_name']
@@ -102,9 +108,10 @@ class DataCollectorInterface:
 
 
             anal_summary = AnalysisSummary(sum_block=[prof_name, total_success_rate, standard_dev],
-                                          anal_block=en_ex,
-                                          crit_block=criteria,
-                                          data_block=[data_count] + dates_fnames)
+                                           anal_block=en_ex,
+                                           crit_block=criteria,
+                                           data_block=[data_count] + dates_fnames,
+                                           out_path=path_out)
             anal_summary.print_summary() # remove later
 
         def finisher():

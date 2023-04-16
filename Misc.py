@@ -66,6 +66,18 @@ if sys.argv[0] == 'App.py':
     revert_to_print_log()
 
 import pdb
+import threading
+
+class StoppableThread(threading.Thread):
+    def __init__(self, *args, **kwargs):
+        super(StoppableThread, self).__init__(*args, **kwargs)
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def is_stopped(self):
+        return self._stop_event.is_set()
 
 class AnalysisSummary:
     """
@@ -77,8 +89,8 @@ class AnalysisSummary:
         self.crit_block = kwargs['crit_block'] # i.e. [visual_crit_1, visual_crit_2, ...]
         self.data_block = kwargs['data_block'] # i.e. [250, ('7/7/2021', 'decliners_jul_7.xslx), (...), ...]
 
-        # self.out_path = kwargs['out_path']
-        self.out_path = 'C:\\Users\\vihaa\\Downloads\\Misc\\test_summary.csv'
+        op = kwargs['out_path']
+        self.out_path = os.path.join(os.path.dirname(op), 'summary_' + os.path.basename(op))
 
     def print_summary(self):
         df = self.setup_summary_array()

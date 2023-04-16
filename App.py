@@ -42,21 +42,28 @@ class App(Frame):
         self.crit_select = CriteriaSelector(self)
         self.crit_select.grid(row=2, column=1, rowspan=10, columnspan=4)
 
+        self.time_remaining = Label(self, text='00s')
+        self.time_remaining.grid(row=3, column=0, pady=10)
+
+        self.interr_button = Button(self, text='Halt', command=self.interrupt_run)
+        self.interr_button.grid(row=4, column=0)
+
         self.entry_exit = EntryExitTester(self)
-        self.entry_exit.grid(row=2, column=0, pady=20)
+        self.entry_exit.grid(row=5, column=0, pady=20)
 
         self.file_input_pane.add_to_run(self.run_collection)
 
         self.progress = Progressbar(self, orient=HORIZONTAL, length=100,  mode='indeterminate')
 
+
         self.order_button = Button(self, text='Open Order Sender', command=self.open_order_window, state=DISABLED)
-        self.order_button.grid(row=3, column=0, sticky=W, pady=15, padx=5)
+        self.order_button.grid(row=6, column=0, sticky=W, pady=15, padx=5)
 
         self.logfile_button = Button(self, text='Open Log File', command=open_log_file)
-        self.logfile_button.grid(row=4, column=0, sticky=W, pady=15, padx=5)
+        self.logfile_button.grid(row=7, column=0, sticky=W, pady=15, padx=5)
 
         self.error_report_button = Button(self, text='Send Error Report', command=self.send_error_report)
-        self.error_report_button.grid(row=5, column=0, sticky=W, pady=15, padx=5)
+        self.error_report_button.grid(row=8, column=0, sticky=W, pady=15, padx=5)
 
         self.recent_lookouts = []
 
@@ -125,31 +132,55 @@ class App(Frame):
         options = self.file_input_pane.get()
         entry_exit = self.entry_exit.get()
 
-        def run_threaded_process():
-            self.progress.grid(row=2, column=0)
-            self.progress.start()
-            out_val, perf_done, open_summary = DataCollectorInterface.run_analysis(options, criteria, entry_exit, prof_name=self.profile_selector.current_state.get())
+        class CustomThread(threading.Thread):
+            def __init__(thr, *args, **kwargs):
+                super(CustomThread, thr).__init__(*args, **kwargs)
+                thr._stop_event = threading.Event()
+            def stop(thr):
+                thr._stop_event.set()
+            def is_stopped(thr):
+                return thr._stop_event.is_set()
+            def run(thr):
+                def time_callback(new_time):
+                    self.time_remaining['text'] = f'{new_time}s'
+                self.progress.grid(row=5, column=0)
+                self.progress.start()
+                out_val, perf_done, open_summary = DataCollectorInterface.run_analysis(options, criteria, entry_exit, prof_name=self.profile_selector.current_state.get(), time_callback=time_callback, thread=thr)
+                if perf_done:
+                    def mod_perf_done():
+                        self.recent_lookouts = perf_done()
+                    completed_popup = create_completed_popup(self, {
+                        'success_rate': out_val,
+                        'open_summary': open_summary,
+                        'open_results': mod_perf_done,
+                        'options': options
+                    })
+                else:
+                    # add any completion action if halted
+                    pass
+
+        self.s_thread = CustomThread()
+        self.s_thread.start()
+        print(criteria, options)
+
+    def interrupt_run(self):
+        try:
+            self.s_thread.stop()
+            self.s_thread.join()
             self.progress.stop()
             self.progress.grid_forget()
-            def mod_perf_done():
-                self.recent_lookouts = perf_done()
-            completed_popup = create_completed_popup(self, {
-                'success_rate': out_val,
-                'open_summary': open_summary,
-                'open_results': mod_perf_done
-            })
-
-        threading.Thread(target=run_threaded_process).start()
-        print(criteria, options)
+        except Exception as e:
+            print('stoppable_thread is not currently running')
+            print(e)
 
     def check_for_auth_success(self):
         if not GLOBAL_ACCT_INFO == None:
             acct_name, trading_cash, liq_value = GLOBAL_ACCT_INFO
             l1 = Label(self, text=f'Welcome, {acct_name}.')
-            l1.grid(row=6, column=0)
+            l1.grid(row=8, column=0)
 
             l2 = Label(self, text=f'Trading Cash: {trading_cash}\tLiquid Value: {liq_value}')
-            l2.grid(row=7, column=0)
+            l2.grid(row=9, column=0)
 
             self.order_button.configure(state=NORMAL)
 
