@@ -43,11 +43,18 @@ class DataCollectorInterface:
     def run_analysis(options, criteria, en_ex, **kwargs):
         boolean_strats, unordered_times = DataCollectorInterface.create_strategies(criteria)
 
+        TP_SL_FLAG = en_ex[4] != '' # did user inculde the data?
+
+        if TP_SL_FLAG:
+           tp_margin = float(en_ex[4]) / 100 
+           sl_margin = float(en_ex[5]) / 100
+
         if DataCollectorInterface.validate_ee(en_ex):
             day_in = int(en_ex[0])
             time_in = en_ex[1]
             day_out = int(en_ex[2])
             time_out = en_ex[3]
+
 
             unordered_times += [time_in, time_out]
 
@@ -74,7 +81,12 @@ class DataCollectorInterface:
 
         if not time_list == []:
             print(kwargs['time_callback'])
-            master = dataFilter.generateMaster(kwargs['time_callback'], kwargs['thread'])
+            tp_sl = None
+            if TP_SL_FLAG: # EE must also be validated
+                tp_sl = (time_in, time_out, tp_margin, sl_margin) 
+                assert day_in == day_out # otherwise can't do tp_sl
+
+            master = dataFilter.generateMaster(kwargs['time_callback'], kwargs['thread'], tp_sl=tp_sl)
         else:
             master = dataFilter
         
@@ -87,7 +99,13 @@ class DataCollectorInterface:
             master.filterFor(strat)
 
         if DataCollectorInterface.validate_ee(en_ex):
-            total_success_rate = master.func_test("Percentage Win", entry_exit_test)
+            total_success_rate = master.func_test("Percentage Win", entry_exit_test) # number to be overwritten
+
+        # master.show()
+
+        if TP_SL_FLAG:
+            master.update_from_repl_list('Percentage Win')
+            total_success_rate = master.get_column('Percentage Win').mean()
 
         master.export_csv(path_out)
 

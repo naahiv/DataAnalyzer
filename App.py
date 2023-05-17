@@ -146,6 +146,8 @@ class App(Frame):
                 self.progress.grid(row=5, column=0)
                 self.progress.start()
                 out_val, perf_done, open_summary = DataCollectorInterface.run_analysis(options, criteria, entry_exit, prof_name=self.profile_selector.current_state.get(), time_callback=time_callback, thread=thr)
+                self.progress.stop()
+                self.progress.grid_forget()
                 if perf_done:
                     def mod_perf_done():
                         self.recent_lookouts = perf_done()

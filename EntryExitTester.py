@@ -29,6 +29,19 @@ class EntryExitTester(Frame):
 
         self.e4 = Entry(self, width=5)
         self.e4.grid(row=0, column=8, padx=10)
+
+        # take profit / stop loss stuff
+        self.tpl = Label(self, text='Take Profit (%): ')
+        self.tpl.grid(row=1, column=0, pady=10)
+        
+        self.tpe = Entry(self, width=4)
+        self.tpe.grid(row=1, column=1)
+
+        self.sll = Label(self, text='Stop Loss (%): ')
+        self.sll.grid(row=2, column=0, pady=10)
+
+        self.sle = Entry(self, width=4)
+        self.sle.grid(row=2, column=1)
     
     def set_manual(self, ee_dict):
         setText(self.e1, ee_dict['day1'])
@@ -37,7 +50,7 @@ class EntryExitTester(Frame):
         setText(self.e4, ee_dict['time2'])
 
     def get(self):
-        return [self.e1.get(), self.e2.get(), self.e3.get(), self.e4.get()]
+        return [self.e1.get(), self.e2.get(), self.e3.get(), self.e4.get(), self.tpe.get(), self.sle.get()]
 
 if __name__ == '__main__':
     from ctypes import windll
