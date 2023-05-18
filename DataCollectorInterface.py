@@ -94,14 +94,13 @@ class DataCollectorInterface:
             print('thread stopped DCI')
             return None, None, None
 
+
         for strat in boolean_strats:
             # master.show()
             master.filterFor(strat)
 
         if DataCollectorInterface.validate_ee(en_ex):
             total_success_rate = master.func_test("Percentage Win", entry_exit_test) # number to be overwritten
-
-        # master.show()
 
         if TP_SL_FLAG:
             master.update_from_repl_list('Percentage Win')
