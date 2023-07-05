@@ -99,6 +99,8 @@ class DataCollectorInterface:
             # master.show()
             master.filterFor(strat)
 
+        total_success_rate = None
+
         if DataCollectorInterface.validate_ee(en_ex):
             total_success_rate = master.func_test("Percentage Win", entry_exit_test) # number to be overwritten
 
